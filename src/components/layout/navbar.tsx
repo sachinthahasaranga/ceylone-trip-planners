@@ -270,8 +270,8 @@ export function Navbar({ user }: { user: NavUser }) {
 
         {/* Contact footer */}
         <div className="border-t border-white/15 px-5 py-4 text-sm text-white/85">
-          <a href="tel:+94771234567" className="flex items-center gap-2">
-            <Phone className="h-4 w-4 text-secondary" /> +94 77 123 4567
+          <a href="tel:+94712758785" className="flex items-center gap-2">
+            <Phone className="h-4 w-4 text-secondary" /> +94 71 275 8785
           </a>
         </div>
       </aside>

@@ -29,6 +29,10 @@ import {
   getGalleryImages,
 } from "@/lib/queries";
 
+export const metadata = {
+  alternates: { canonical: "/" },
+};
+
 export default async function HomePage() {
   const [destinations, tours, posts, testimonials, galleryImages] =
     await Promise.all([

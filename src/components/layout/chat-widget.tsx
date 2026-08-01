@@ -68,7 +68,7 @@ const FLOW: Step[] = [
   },
 ];
 
-const WHATSAPP = "https://wa.me/94771234567";
+const WHATSAPP = "https://wa.me/94712758785";
 
 export function ChatWidget() {
   const [open, setOpen] = useState(false);
@@ -276,7 +276,7 @@ export function ChatWidget() {
                         ? "Type your name…"
                         : current.key === "email"
                           ? "you@email.com"
-                          : "+94 77 123 4567"
+                          : "+94 71 275 8785"
                     }
                     className="h-11 flex-1 rounded-full border border-border bg-surface px-4 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
                   />

@@ -8,7 +8,10 @@ import { PageHeader } from "@/components/ui/page-header";
 import { SignOutButton } from "@/components/auth/signout-button";
 import { Button } from "@/components/ui/button";
 
-export const metadata: Metadata = { title: "My Account" };
+export const metadata: Metadata = {
+  title: "My Account",
+  robots: { index: false, follow: false },
+};
 
 const statusStyles: Record<string, string> = {
   PENDING: "bg-secondary/20 text-[#8a5a00]",

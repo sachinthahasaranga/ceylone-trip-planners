@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { DM_Sans } from "next/font/google";
 import "./globals.css";
 import { SmoothScroll } from "@/components/providers/smooth-scroll";
+import { JsonLd } from "@/components/seo/json-ld";
+import { orgJsonLd, websiteJsonLd } from "@/lib/seo";
 
 const dmSans = DM_Sans({
   subsets: ["latin"],
@@ -39,6 +41,9 @@ export const metadata: Metadata = {
   },
   twitter: { card: "summary_large_image" },
   robots: { index: true, follow: true },
+  verification: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION
+    ? { google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION }
+    : undefined,
   manifest: "/manifest.webmanifest",
   icons: {
     icon: [
@@ -63,6 +68,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={dmSans.variable}>
       <body>
+        <JsonLd data={[orgJsonLd(), websiteJsonLd()]} />
         <SmoothScroll>{children}</SmoothScroll>
       </body>
     </html>

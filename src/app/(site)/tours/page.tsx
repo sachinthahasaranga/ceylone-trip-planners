@@ -7,6 +7,7 @@ export const metadata: Metadata = {
   title: "Sri Lanka Tour Packages",
   description:
     "Browse our curated Sri Lanka tour packages — wildlife safaris, cultural journeys, hill country escapes and beach holidays.",
+  alternates: { canonical: "/tours" },
 };
 
 export default async function ToursPage() {

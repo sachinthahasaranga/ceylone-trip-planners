@@ -178,8 +178,8 @@ export default function TermsPage() {
         <Section n={16} title="Contact us">
           <p>
             For any questions about these Terms & Conditions, please contact us
-            at info@ceylontripplanners.com or +94 77 123 4567, or write to us at
-            42 Galle Road, Colombo 03, Sri Lanka.
+            at info@ceylontripplanners.com or +94 71 275 8785, or write to us at
+            No 125, Winsant Park, Negombo, Sri Lanka.
           </p>
         </Section>
       </LegalDoc>

@@ -34,10 +34,10 @@ async function main() {
       id: "default",
       siteName: "Ceylon Trip Planners",
       tagline: "Discover the Wonder of Sri Lanka",
-      phone: "+94 77 123 4567",
-      whatsapp: "94771234567",
+      phone: "+94 71 275 8785",
+      whatsapp: "94712758785",
       email: "info@ceylontripplanners.com",
-      address: "42 Galle Road, Colombo 03, Sri Lanka",
+      address: "No 125, Winsant Park, Negombo, Sri Lanka",
     },
   });
 

@@ -122,11 +122,11 @@ export function Footer() {
             <ul className="space-y-3 text-sm">
               <li className="flex gap-3">
                 <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-secondary" />
-                <span>42 Galle Road, Colombo 03, Sri Lanka</span>
+                <span>No 125, Winsant Park, Negombo, Sri Lanka</span>
               </li>
               <li className="flex gap-3">
                 <Phone className="mt-0.5 h-4 w-4 shrink-0 text-secondary" />
-                <a href="tel:+94771234567">+94 77 123 4567</a>
+                <a href="tel:+94712758785">+94 71 275 8785</a>
               </li>
               <li className="flex gap-3">
                 <Mail className="mt-0.5 h-4 w-4 shrink-0 text-secondary" />

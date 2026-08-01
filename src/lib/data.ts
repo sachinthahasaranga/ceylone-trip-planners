@@ -14,6 +14,14 @@ export type Destination = {
   highlights: string[];
   bestTime?: string;
   featured?: boolean;
+  seo?: Seo;
+};
+
+export type Seo = {
+  metaTitle?: string | null;
+  metaDescription?: string | null;
+  ogImage?: string | null;
+  keywords?: string | null;
 };
 
 export type Tour = {
@@ -31,6 +39,7 @@ export type Tour = {
   rating: number;
   featured?: boolean;
   highlights: string[];
+  seo?: Seo;
 };
 
 export type Post = {
@@ -43,6 +52,7 @@ export type Post = {
   date: string;
   category: string;
   readMinutes: number;
+  seo?: Seo;
 };
 
 export type Testimonial = {

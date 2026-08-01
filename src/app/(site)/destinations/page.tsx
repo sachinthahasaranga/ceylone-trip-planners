@@ -7,6 +7,7 @@ export const metadata: Metadata = {
   title: "Destinations in Sri Lanka",
   description:
     "Explore the best destinations in Sri Lanka — from Sigiriya and Kandy to Ella, Galle and the wild south.",
+  alternates: { canonical: "/destinations" },
 };
 
 export default async function DestinationsPage() {

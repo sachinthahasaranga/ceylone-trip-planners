@@ -5,6 +5,8 @@ import { notFound } from "next/navigation";
 import { CalendarDays, Clock, User } from "lucide-react";
 import { PageHeader } from "@/components/ui/page-header";
 import { RichText } from "@/components/ui/rich-text";
+import { JsonLd } from "@/components/seo/json-ld";
+import { articleJsonLd, breadcrumbJsonLd } from "@/lib/seo";
 import { getPost, getPosts } from "@/lib/queries";
 
 export async function generateStaticParams() {
@@ -21,9 +23,17 @@ export async function generateMetadata({
   const p = await getPost(slug);
   if (!p) return { title: "Article not found" };
   return {
-    title: p.title,
-    description: p.excerpt,
-    openGraph: { type: "article", images: [p.image] },
+    title: p.seo?.metaTitle || p.title,
+    description: p.seo?.metaDescription || p.excerpt,
+    keywords: p.seo?.keywords || undefined,
+    alternates: { canonical: `/blog/${slug}` },
+    openGraph: {
+      type: "article",
+      title: p.seo?.metaTitle || p.title,
+      description: p.seo?.metaDescription || p.excerpt,
+      publishedTime: p.date,
+      images: [p.seo?.ogImage || p.image],
+    },
   };
 }
 
@@ -40,6 +50,16 @@ export default async function BlogDetailPage({
 
   return (
     <>
+      <JsonLd
+        data={[
+          articleJsonLd(p),
+          breadcrumbJsonLd([
+            { name: "Home", path: "/" },
+            { name: "Blog", path: "/blog" },
+            { name: p.title, path: `/blog/${slug}` },
+          ]),
+        ]}
+      />
       <PageHeader
         title={p.title}
         image={p.image}

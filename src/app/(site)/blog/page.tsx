@@ -10,6 +10,7 @@ export const metadata: Metadata = {
   title: "Travel Blog",
   description:
     "Sri Lanka travel tips, guides and inspiration from the Ceylon Trip Planners team.",
+  alternates: { canonical: "/blog" },
 };
 
 const categories = ["All", "Travel Tips", "Guides", "Food & Culture", "Wildlife"];

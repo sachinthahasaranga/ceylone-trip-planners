@@ -10,8 +10,8 @@ export const metadata: Metadata = {
 };
 
 const info = [
-  { icon: MapPin, label: "Visit us", value: "42 Galle Road, Colombo 03, Sri Lanka" },
-  { icon: Phone, label: "Call us", value: "+94 77 123 4567", href: "tel:+94771234567" },
+  { icon: MapPin, label: "Visit us", value: "No 125, Winsant Park, Negombo, Sri Lanka" },
+  { icon: Phone, label: "Call us", value: "+94 71 275 8785", href: "tel:+94712758785" },
   { icon: Mail, label: "Email us", value: "info@ceylontripplanners.com", href: "mailto:info@ceylontripplanners.com" },
   { icon: Clock, label: "Office hours", value: "Mon–Sat, 9am – 6pm (GMT+5:30)" },
 ];
@@ -58,7 +58,7 @@ export default function ContactPage() {
             </div>
 
             <a
-              href="https://wa.me/94771234567"
+              href="https://wa.me/94712758785"
               target="_blank"
               rel="noopener noreferrer"
               className="mt-8 inline-flex items-center gap-2 rounded-full bg-[#25D366] px-6 py-3 font-semibold text-white transition hover:brightness-105"
@@ -79,7 +79,7 @@ export default function ContactPage() {
           <div className="overflow-hidden rounded-2xl border border-border">
             <iframe
               title="Ceylon Trip Planners location"
-              src="https://www.google.com/maps?q=Colombo,Sri+Lanka&output=embed"
+              src="https://www.google.com/maps?q=Negombo,Sri+Lanka&output=embed"
               width="100%"
               height="420"
               loading="lazy"

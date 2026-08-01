@@ -6,6 +6,8 @@ import { PageHeader } from "@/components/ui/page-header";
 import { TourCard } from "@/components/cards/tour-card";
 import { RichText } from "@/components/ui/rich-text";
 import { Button } from "@/components/ui/button";
+import { JsonLd } from "@/components/seo/json-ld";
+import { breadcrumbJsonLd } from "@/lib/seo";
 import { getDestination, getDestinations } from "@/lib/queries";
 import { getTours } from "@/lib/queries";
 
@@ -23,9 +25,15 @@ export async function generateMetadata({
   const d = await getDestination(slug);
   if (!d) return { title: "Destination not found" };
   return {
-    title: d.name,
-    description: d.shortDesc,
-    openGraph: { images: [d.image] },
+    title: d.seo?.metaTitle || `${d.name}, Sri Lanka`,
+    description: d.seo?.metaDescription || d.shortDesc,
+    keywords: d.seo?.keywords || undefined,
+    alternates: { canonical: `/destinations/${slug}` },
+    openGraph: {
+      title: d.seo?.metaTitle || d.name,
+      description: d.seo?.metaDescription || d.shortDesc,
+      images: [d.seo?.ogImage || d.image],
+    },
   };
 }
 
@@ -42,6 +50,27 @@ export default async function DestinationDetailPage({
 
   return (
     <>
+      <JsonLd
+        data={[
+          {
+            "@context": "https://schema.org",
+            "@type": "TouristDestination",
+            name: d.name,
+            description: d.shortDesc,
+            image: d.image,
+            address: {
+              "@type": "PostalAddress",
+              addressRegion: d.region,
+              addressCountry: "LK",
+            },
+          },
+          breadcrumbJsonLd([
+            { name: "Home", path: "/" },
+            { name: "Destinations", path: "/destinations" },
+            { name: d.name, path: `/destinations/${slug}` },
+          ]),
+        ]}
+      />
       <PageHeader
         title={d.name}
         subtitle={d.region}

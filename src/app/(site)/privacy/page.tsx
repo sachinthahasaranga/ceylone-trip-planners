@@ -29,8 +29,8 @@ export default function PrivacyPage() {
           <List
             items={[
               "Email: info@ceylontripplanners.com",
-              "Phone: +94 77 123 4567",
-              "Address: 42 Galle Road, Colombo 03, Sri Lanka",
+              "Phone: +94 71 275 8785",
+              "Address: No 125, Winsant Park, Negombo, Sri Lanka",
             ]}
           />
         </Section>
@@ -180,7 +180,7 @@ export default function PrivacyPage() {
           <p>
             If you have any questions about this Privacy Policy or how we handle
             your information, please contact us at
-            info@ceylontripplanners.com or +94 77 123 4567.
+            info@ceylontripplanners.com or +94 71 275 8785.
           </p>
         </Section>
       </LegalDoc>

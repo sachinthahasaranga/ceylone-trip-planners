@@ -18,6 +18,8 @@ import { BookingForm } from "@/components/forms/booking-form";
 import { TourGallery } from "@/components/tours/tour-gallery";
 import { RichText } from "@/components/ui/rich-text";
 import { Button } from "@/components/ui/button";
+import { JsonLd } from "@/components/seo/json-ld";
+import { tourJsonLd, breadcrumbJsonLd } from "@/lib/seo";
 import { formatPrice } from "@/lib/utils";
 import { getTour, getTours } from "@/lib/queries";
 
@@ -34,10 +36,17 @@ export async function generateMetadata({
   const { slug } = await params;
   const tour = await getTour(slug);
   if (!tour) return { title: "Tour not found" };
+  const ogImage = tour.seo?.ogImage || tour.image;
   return {
-    title: tour.title,
-    description: tour.summary,
-    openGraph: { images: [tour.image] },
+    title: tour.seo?.metaTitle || tour.title,
+    description: tour.seo?.metaDescription || tour.summary,
+    keywords: tour.seo?.keywords || undefined,
+    alternates: { canonical: `/tours/${slug}` },
+    openGraph: {
+      title: tour.seo?.metaTitle || tour.title,
+      description: tour.seo?.metaDescription || tour.summary,
+      images: [ogImage],
+    },
   };
 }
 
@@ -82,6 +91,16 @@ export default async function TourDetailPage({
 
   return (
     <>
+      <JsonLd
+        data={[
+          tourJsonLd(tour),
+          breadcrumbJsonLd([
+            { name: "Home", path: "/" },
+            { name: "Tours", path: "/tours" },
+            { name: tour.title, path: `/tours/${slug}` },
+          ]),
+        ]}
+      />
       <PageHeader
         title={tour.title}
         subtitle={tour.summary}

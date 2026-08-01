@@ -1,18 +1,22 @@
 import type { Metadata } from "next";
 import { PageHeader } from "@/components/ui/page-header";
 import { Button } from "@/components/ui/button";
+import { JsonLd } from "@/components/seo/json-ld";
+import { faqJsonLd } from "@/lib/seo";
 import { getFaqs } from "@/lib/queries";
 
 export const metadata: Metadata = {
-  title: "FAQ",
+  title: "FAQ — Sri Lanka Travel Questions",
   description:
-    "Frequently asked questions about traveling to Sri Lanka with Ceylon Trip Planners.",
+    "Frequently asked questions about traveling to Sri Lanka with Ceylon Trip Planners — visas, best time to visit, bookings and more.",
+  alternates: { canonical: "/faq" },
 };
 
 export default async function FaqPage() {
   const faqs = await getFaqs();
   return (
     <>
+      {faqs.length > 0 && <JsonLd data={faqJsonLd(faqs)} />}
       <PageHeader
         title="Frequently Asked Questions"
         subtitle="Everything you need to know before you travel."

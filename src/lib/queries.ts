@@ -27,6 +27,16 @@ function tourFromDb(t: any): Tour {
     rating: t.rating ?? 5,
     featured: t.featured,
     highlights: t.highlights?.length ? t.highlights : (t.inclusions ?? []).slice(0, 3),
+    seo: seoFrom(t),
+  };
+}
+
+function seoFrom(r: any) {
+  return {
+    metaTitle: r.metaTitle ?? null,
+    metaDescription: r.metaDescription ?? null,
+    ogImage: r.ogImage ?? null,
+    keywords: r.keywords ?? null,
   };
 }
 
@@ -41,6 +51,7 @@ function destinationFromDb(d: any): Destination {
     highlights: d.highlights ?? [],
     bestTime: d.bestTime ?? "",
     featured: d.featured,
+    seo: seoFrom(d),
   };
 }
 
@@ -55,6 +66,7 @@ function postFromDb(p: any): Post {
     date: (p.publishedAt ?? p.createdAt ?? new Date()).toISOString(),
     category: p.tags?.[0] ?? "Travel",
     readMinutes: p.readMinutes ?? 5,
+    seo: seoFrom(p),
   };
 }
 
