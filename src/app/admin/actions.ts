@@ -77,6 +77,7 @@ export async function saveTour(id: string | null, fd: FormData) {
     durationNights: num(fd, "durationNights"),
     difficulty: str(fd, "difficulty"),
     groupSize: str(fd, "groupSize"),
+    categoryId: str(fd, "categoryId") || null,
     inclusions: lines(fd, "inclusions"),
     exclusions: lines(fd, "exclusions"),
     featured: bool(fd, "featured"),

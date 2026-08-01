@@ -9,13 +9,16 @@ export default async function EditTourPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const tour = await prisma.tourPackage.findUnique({ where: { id } });
+  const [tour, categories] = await Promise.all([
+    prisma.tourPackage.findUnique({ where: { id } }),
+    prisma.category.findMany({ where: { type: "TOUR" }, orderBy: { name: "asc" } }),
+  ]);
   if (!tour) notFound();
 
   return (
     <div>
       <AdminHeader title="Edit tour" back="/admin/tours" />
-      <TourForm tour={tour} />
+      <TourForm tour={tour} categories={categories} />
     </div>
   );
 }

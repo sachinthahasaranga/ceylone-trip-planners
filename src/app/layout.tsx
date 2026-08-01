@@ -39,6 +39,22 @@ export const metadata: Metadata = {
   },
   twitter: { card: "summary_large_image" },
   robots: { index: true, follow: true },
+  manifest: "/manifest.webmanifest",
+  icons: {
+    icon: [
+      { url: "/fav_icons/favicon.ico", sizes: "any" },
+      { url: "/fav_icons/favicon-16x16.png", type: "image/png", sizes: "16x16" },
+      { url: "/fav_icons/favicon-32x32.png", type: "image/png", sizes: "32x32" },
+      { url: "/fav_icons/android-chrome-192x192.png", type: "image/png", sizes: "192x192" },
+      { url: "/fav_icons/android-chrome-512x512.png", type: "image/png", sizes: "512x512" },
+    ],
+    apple: [{ url: "/fav_icons/apple-touch-icon.png", sizes: "180x180" }],
+    shortcut: ["/fav_icons/favicon.ico"],
+  },
+};
+
+export const viewport = {
+  themeColor: "#0e7c66",
 };
 
 export default function RootLayout({

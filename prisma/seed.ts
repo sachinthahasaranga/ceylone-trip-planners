@@ -74,13 +74,27 @@ async function main() {
   }
   console.log(`   ✔ ${destinations.length} destinations`);
 
+  // ---- Tour categories ----
+  const tourCategoryNames = ["Cultural", "Wildlife", "Beach", "Nature", "Luxury"];
+  const catId: Record<string, string> = {};
+  for (const name of tourCategoryNames) {
+    const slug = name.toLowerCase();
+    const c = await prisma.category.upsert({
+      where: { slug },
+      update: {},
+      create: { slug, name, type: "TOUR" },
+    });
+    catId[name] = c.id;
+  }
+  console.log(`   ✔ ${tourCategoryNames.length} tour categories`);
+
   // ---- Tours ----
   const tours = [
-    { slug: "essence-of-sri-lanka-7d", title: "Essence of Sri Lanka", summary: "A 7-day journey through the Cultural Triangle, hill country and Kandy.", image: img("photo-1566296314736-6eaac1ca0cb9"), price: 890, days: 7, nights: 6, difficulty: "Easy", featured: true },
-    { slug: "wildlife-safari-adventure-5d", title: "Wildlife Safari Adventure", summary: "5 days tracking leopards and elephants across Yala and Udawalawe.", image: img("photo-1549366021-9f761d450615"), price: 720, days: 5, nights: 4, difficulty: "Moderate", featured: true },
-    { slug: "beaches-and-whales-6d", title: "Southern Beaches & Whales", summary: "Relax along the south coast with whale watching and Galle Fort.", image: img("photo-1507525428034-b723cf961d3e"), price: 640, days: 6, nights: 5, difficulty: "Easy", featured: true },
-    { slug: "hill-country-tea-trails-4d", title: "Hill Country Tea Trails", summary: "4 days among misty peaks, tea factories and Horton Plains.", image: img("photo-1602216056096-3b40cc0c9944"), price: 480, days: 4, nights: 3, difficulty: "Moderate", featured: false },
-    { slug: "grand-tour-of-ceylon-12d", title: "Grand Tour of Ceylon", summary: "The complete 12-day island loop — culture, wildlife, mountains, beaches.", image: img("photo-1588416936097-41850ab3d86d"), price: 1650, days: 12, nights: 11, difficulty: "Moderate", featured: true },
+    { slug: "essence-of-sri-lanka-7d", title: "Essence of Sri Lanka", summary: "A 7-day journey through the Cultural Triangle, hill country and Kandy.", image: img("photo-1566296314736-6eaac1ca0cb9"), price: 890, days: 7, nights: 6, difficulty: "Easy", featured: true, category: "Cultural" },
+    { slug: "wildlife-safari-adventure-5d", title: "Wildlife Safari Adventure", summary: "5 days tracking leopards and elephants across Yala and Udawalawe.", image: img("photo-1549366021-9f761d450615"), price: 720, days: 5, nights: 4, difficulty: "Moderate", featured: true, category: "Wildlife" },
+    { slug: "beaches-and-whales-6d", title: "Southern Beaches & Whales", summary: "Relax along the south coast with whale watching and Galle Fort.", image: img("photo-1507525428034-b723cf961d3e"), price: 640, days: 6, nights: 5, difficulty: "Easy", featured: true, category: "Beach" },
+    { slug: "hill-country-tea-trails-4d", title: "Hill Country Tea Trails", summary: "4 days among misty peaks, tea factories and Horton Plains.", image: img("photo-1602216056096-3b40cc0c9944"), price: 480, days: 4, nights: 3, difficulty: "Moderate", featured: false, category: "Nature" },
+    { slug: "grand-tour-of-ceylon-12d", title: "Grand Tour of Ceylon", summary: "The complete 12-day island loop — culture, wildlife, mountains, beaches.", image: img("photo-1588416936097-41850ab3d86d"), price: 1650, days: 12, nights: 11, difficulty: "Moderate", featured: true, category: "Luxury" },
   ];
 
   // Extra imagery pool so each tour has a multi-image gallery to showcase.
@@ -101,7 +115,7 @@ async function main() {
     // price left at 0 = hidden ("Price on request"), since rates vary by hotel.
     await prisma.tourPackage.upsert({
       where: { slug: t.slug },
-      update: { description: html, gallery, price: 0 },
+      update: { description: html, gallery, price: 0, categoryId: catId[t.category] },
       create: {
         slug: t.slug,
         title: t.title,
@@ -110,6 +124,7 @@ async function main() {
         coverImage: t.image,
         gallery,
         price: 0,
+        categoryId: catId[t.category],
         durationDays: t.days,
         durationNights: t.nights,
         difficulty: t.difficulty,

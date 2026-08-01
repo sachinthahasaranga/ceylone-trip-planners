@@ -12,7 +12,15 @@ import {
 import { ImageUploader } from "@/components/admin/image-uploader";
 import { RichTextEditor } from "@/components/admin/rich-text-editor";
 
-export function TourForm({ tour }: { tour?: TourPackage }) {
+type Cat = { id: string; name: string };
+
+export function TourForm({
+  tour,
+  categories = [],
+}: {
+  tour?: TourPackage;
+  categories?: Cat[];
+}) {
   const action = saveTour.bind(null, tour?.id ?? null);
 
   return (
@@ -91,9 +99,19 @@ export function TourForm({ tour }: { tour?: TourPackage }) {
               <Input name="durationNights" type="number" min={0} defaultValue={tour?.durationNights ?? 0} />
             </Field>
           </div>
-          <div className="mt-4">
+          <div className="mt-4 grid grid-cols-2 gap-4">
             <Field label="Group size">
               <Input name="groupSize" defaultValue={tour?.groupSize ?? "Private"} />
+            </Field>
+            <Field label="Category" hint="Used by the tours page filters">
+              <Select name="categoryId" defaultValue={tour?.categoryId ?? ""}>
+                <option value="">Uncategorised</option>
+                {categories.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.name}
+                  </option>
+                ))}
+              </Select>
             </Field>
           </div>
         </Card>

@@ -9,7 +9,6 @@ import {
   Menu,
   X,
   Phone,
-  Palmtree,
   ChevronDown,
   LayoutDashboard,
   User as UserIcon,
@@ -36,11 +35,21 @@ export function Navbar({ user }: { user: NavUser }) {
   const pathname = usePathname();
   const isHome = pathname === "/";
 
+  // rAF-based so it works reliably with smooth-scroll (Lenis), which can
+  // bypass native scroll events. Reads the live scroll position each frame.
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24);
-    onScroll();
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
+    let raf = 0;
+    let last = -1;
+    const tick = () => {
+      const now = window.scrollY > 24 ? 1 : 0;
+      if (now !== last) {
+        last = now;
+        setScrolled(now === 1);
+      }
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
   }, []);
 
   useEffect(() => {
@@ -58,6 +67,7 @@ export function Navbar({ user }: { user: NavUser }) {
   const solid = scrolled || !isHome;
 
   return (
+    <>
     <header
       className={cn(
         "fixed inset-x-0 top-0 z-50 transition-all duration-300",
@@ -68,33 +78,29 @@ export function Navbar({ user }: { user: NavUser }) {
     >
       <nav className="container-px mx-auto flex h-16 max-w-[90rem] items-center justify-between lg:h-20">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2">
-          <span
+        <Link href="/" aria-label="Ceylon Trip Planners" className="relative flex items-center">
+          <Image
+            src="/ceylonetripplanners_logo_long_white.webp"
+            alt="Ceylon Trip Planners"
+            width={900}
+            height={250}
+            priority
             className={cn(
-              "grid h-10 w-10 place-items-center rounded-full transition-colors",
-              solid ? "bg-primary text-white" : "bg-white/15 text-white backdrop-blur"
+              "h-11 w-auto transition-opacity duration-300 lg:h-14",
+              solid ? "opacity-0" : "opacity-100"
             )}
-          >
-            <Palmtree className="h-5 w-5" />
-          </span>
-          <span className="leading-tight">
-            <span
-              className={cn(
-                "block font-heading text-lg font-semibold",
-                solid ? "text-text" : "text-white"
-              )}
-            >
-              Ceylon
-            </span>
-            <span
-              className={cn(
-                "block text-[0.65rem] font-medium uppercase tracking-[0.25em]",
-                solid ? "text-primary" : "text-secondary"
-              )}
-            >
-              Trip Planners
-            </span>
-          </span>
+          />
+          <Image
+            src="/ceylonetripplanners_logo_long_black.webp"
+            alt=""
+            aria-hidden
+            width={900}
+            height={234}
+            className={cn(
+              "absolute left-0 top-1/2 h-11 w-auto -translate-y-1/2 transition-opacity duration-300 lg:h-14",
+              solid ? "opacity-100" : "opacity-0"
+            )}
+          />
         </Link>
 
         {/* Desktop links */}
@@ -157,8 +163,11 @@ export function Navbar({ user }: { user: NavUser }) {
           {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
         </button>
       </nav>
+    </header>
 
-      {/* Mobile drawer — slides in from the left, brand green */}
+      {/* Mobile drawer — slides in from the left, brand green.
+          Rendered OUTSIDE <header> because the header's backdrop-blur would
+          otherwise become the containing block and clamp this fixed panel. */}
       <div
         onClick={() => setOpen(false)}
         className={cn(
@@ -172,16 +181,14 @@ export function Navbar({ user }: { user: NavUser }) {
       >
         {/* Drawer header */}
         <div className="flex items-center justify-between border-b border-white/15 px-5 py-4">
-          <Link href="/" onClick={() => setOpen(false)} className="flex items-center gap-2">
-            <span className="grid h-9 w-9 place-items-center rounded-full bg-white/15">
-              <Palmtree className="h-5 w-5" />
-            </span>
-            <span className="leading-tight">
-              <span className="block font-heading text-base font-semibold">Ceylon</span>
-              <span className="block text-[0.6rem] font-medium uppercase tracking-[0.25em] text-secondary">
-                Trip Planners
-              </span>
-            </span>
+          <Link href="/" onClick={() => setOpen(false)} aria-label="Ceylon Trip Planners">
+            <Image
+              src="/ceylonetripplanners_logo_long_white.webp"
+              alt="Ceylon Trip Planners"
+              width={900}
+              height={250}
+              className="h-10 w-auto"
+            />
           </Link>
           <button
             onClick={() => setOpen(false)}
@@ -268,7 +275,7 @@ export function Navbar({ user }: { user: NavUser }) {
           </a>
         </div>
       </aside>
-    </header>
+    </>
   );
 }
 

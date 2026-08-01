@@ -1,6 +1,6 @@
 import Link from "next/link";
+import Image from "next/image";
 import {
-  Palmtree,
   Facebook,
   Instagram,
   Twitter,
@@ -54,17 +54,19 @@ export function Footer() {
         <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-5">
           {/* Brand */}
           <div className="lg:col-span-2">
-            <Link href="/" className="flex items-center gap-2">
-              <span className="grid h-10 w-10 place-items-center rounded-full bg-primary text-white">
-                <Palmtree className="h-5 w-5" />
-              </span>
-              <span className="font-heading text-xl font-semibold text-white">
-                Ceylon Trip Planners
-              </span>
+            <Link href="/" aria-label="Ceylon Trip Planners" className="inline-block">
+              <Image
+                src="/ceylonetripplanners_logo_white.webp"
+                alt="Ceylon Trip Planners"
+                width={1024}
+                height={1024}
+                className="h-auto w-36"
+              />
             </Link>
             <p className="mt-4 max-w-sm text-sm leading-relaxed text-white/70">
-              A local, award-winning travel company crafting bespoke journeys
-              across Sri Lanka — from misty tea hills to golden southern beaches.
+              Ceylon Trip Planners (Pvt) Ltd is a registered Sri Lankan travel
+              company crafting bespoke journeys across the island — from misty
+              tea hills to golden southern beaches.
             </p>
             <div className="mt-5 flex gap-3">
               {[Facebook, Instagram, Twitter, Youtube].map((Icon, i) => (
@@ -137,7 +139,7 @@ export function Footer() {
         </div>
 
         <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-6 text-xs text-white/60 sm:flex-row">
-          <p>© {new Date().getFullYear()} Ceylon Trip Planners. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} Ceylon Trip Planners (Pvt) Ltd. All rights reserved.</p>
           <ul className="flex gap-5">
             {legal.map((l) => (
               <li key={l.href}>
