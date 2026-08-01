@@ -68,8 +68,14 @@ export function TourForm({ tour }: { tour?: TourPackage }) {
 
         <Card>
           <div className="grid grid-cols-2 gap-4">
-            <Field label="Price (USD)">
-              <Input name="price" type="number" min={0} defaultValue={tour?.price ?? 0} required />
+            <Field label="Price (USD)" hint="Leave blank to hide — shows 'Price on request'">
+              <Input
+                name="price"
+                type="number"
+                min={0}
+                defaultValue={tour?.price ? tour.price : ""}
+                placeholder="On request"
+              />
             </Field>
             <Field label="Difficulty">
               <Select name="difficulty" defaultValue={tour?.difficulty ?? "Easy"}>

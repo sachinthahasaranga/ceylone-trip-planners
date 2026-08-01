@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { PageHeader } from "@/components/ui/page-header";
+import { PostCard } from "@/components/cards/post-card";
 import { getPosts } from "@/lib/queries";
 
 export const metadata: Metadata = {
@@ -69,32 +70,7 @@ export default async function BlogPage() {
           {/* Grid */}
           <div className="mt-8 grid gap-6 md:grid-cols-3">
             {rest.concat(posts).slice(0, 6).map((p, i) => (
-              <Link
-                key={`${p.slug}-${i}`}
-                href={`/blog/${p.slug}`}
-                className="group overflow-hidden rounded-2xl bg-white shadow-[var(--shadow-card)] ring-1 ring-border/60 transition hover:-translate-y-1"
-              >
-                <div className="relative aspect-[16/10] overflow-hidden">
-                  <Image src={p.image} alt={p.title} fill sizes="33vw" className="object-cover transition-transform duration-500 group-hover:scale-105" />
-                  <span className="absolute left-4 top-4 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-primary">
-                    {p.category}
-                  </span>
-                </div>
-                <div className="p-5">
-                  <p className="text-xs text-muted">
-                    {new Date(p.date).toLocaleDateString("en-US", {
-                      day: "numeric",
-                      month: "long",
-                      year: "numeric",
-                    })}{" "}
-                    · {p.readMinutes} min read
-                  </p>
-                  <h3 className="mt-2 font-heading text-lg font-semibold leading-snug group-hover:text-primary">
-                    {p.title}
-                  </h3>
-                  <p className="mt-2 line-clamp-2 text-sm text-muted">{p.excerpt}</p>
-                </div>
-              </Link>
+              <PostCard key={`${p.slug}-${i}`} post={p} />
             ))}
           </div>
         </div>

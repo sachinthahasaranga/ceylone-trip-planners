@@ -47,6 +47,13 @@ export function Navbar({ user }: { user: NavUser }) {
     setOpen(false);
   }, [pathname]);
 
+  useEffect(() => {
+    document.body.style.overflow = open ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [open]);
+
   // Solid header on non-home pages OR when scrolled
   const solid = scrolled || !isHome;
 
@@ -151,78 +158,116 @@ export function Navbar({ user }: { user: NavUser }) {
         </button>
       </nav>
 
-      {/* Mobile drawer */}
+      {/* Mobile drawer — slides in from the left, brand green */}
       <div
+        onClick={() => setOpen(false)}
         className={cn(
-          "overflow-hidden bg-white lg:hidden",
-          "transition-[max-height] duration-300 ease-in-out",
-          open ? "max-h-[560px] border-t" : "max-h-0"
+          "fixed inset-0 z-[55] bg-black/50 transition-opacity duration-300 lg:hidden",
+          open ? "opacity-100" : "pointer-events-none opacity-0"
         )}
+      />
+      <aside
+        style={{ transform: open ? "translateX(0)" : "translateX(-100%)" }}
+        className="fixed inset-y-0 left-0 z-[60] flex w-[82%] max-w-[340px] flex-col bg-gradient-to-b from-primary to-primary-dark text-white shadow-2xl transition-transform duration-300 ease-out lg:hidden"
       >
-        <ul className="container-px mx-auto flex max-w-[90rem] flex-col py-3">
-          {links.map((l) => (
-            <li key={l.href}>
-              <Link
-                href={l.href}
-                className={cn(
-                  "block rounded-lg px-3 py-3 text-base font-medium",
-                  pathname === l.href
-                    ? "bg-primary/10 text-primary"
-                    : "text-text/80 hover:bg-surface"
-                )}
-              >
-                {l.label}
-              </Link>
-            </li>
-          ))}
-          {user ? (
-            <>
-              <li className="mt-2 flex items-center gap-3 border-t border-border px-3 pt-3">
-                <span className="grid h-9 w-9 place-items-center overflow-hidden rounded-full bg-primary/10 text-primary">
-                  {user.image ? (
-                    <Image src={user.image} alt="" width={36} height={36} className="h-9 w-9 object-cover" />
-                  ) : (
-                    <UserIcon className="h-4 w-4" />
-                  )}
-                </span>
-                <span className="text-sm font-semibold">{user.name ?? "My account"}</span>
-              </li>
-              {user.role === "ADMIN" && (
-                <li>
-                  <Link href="/admin" className="flex items-center gap-2 rounded-lg px-3 py-3 text-base font-medium text-primary hover:bg-surface">
-                    <LayoutDashboard className="h-4 w-4" /> Admin Dashboard
+        {/* Drawer header */}
+        <div className="flex items-center justify-between border-b border-white/15 px-5 py-4">
+          <Link href="/" onClick={() => setOpen(false)} className="flex items-center gap-2">
+            <span className="grid h-9 w-9 place-items-center rounded-full bg-white/15">
+              <Palmtree className="h-5 w-5" />
+            </span>
+            <span className="leading-tight">
+              <span className="block font-heading text-base font-semibold">Ceylon</span>
+              <span className="block text-[0.6rem] font-medium uppercase tracking-[0.25em] text-secondary">
+                Trip Planners
+              </span>
+            </span>
+          </Link>
+          <button
+            onClick={() => setOpen(false)}
+            aria-label="Close menu"
+            className="grid h-9 w-9 place-items-center rounded-full bg-white/10 transition hover:bg-white/20"
+          >
+            <X className="h-5 w-5" />
+          </button>
+        </div>
+
+        {/* Links */}
+        <nav className="flex-1 overflow-y-auto px-4 py-4">
+          <ul className="space-y-1">
+            {links.map((l) => {
+              const active = pathname === l.href;
+              return (
+                <li key={l.href}>
+                  <Link
+                    href={l.href}
+                    onClick={() => setOpen(false)}
+                    className={cn(
+                      "block rounded-xl px-4 py-3 text-base font-medium transition-colors",
+                      active
+                        ? "bg-white/15 text-white"
+                        : "text-white/85 hover:bg-white/10"
+                    )}
+                  >
+                    {l.label}
                   </Link>
                 </li>
-              )}
-              <li>
-                <Link href="/account" className="flex items-center gap-2 rounded-lg px-3 py-3 text-base font-medium text-text/80 hover:bg-surface">
-                  <UserIcon className="h-4 w-4" /> My Account
+              );
+            })}
+          </ul>
+
+          <div className="mt-5 border-t border-white/15 pt-4">
+            {user ? (
+              <div className="space-y-1">
+                <div className="flex items-center gap-3 px-4 py-2">
+                  <span className="grid h-9 w-9 place-items-center overflow-hidden rounded-full bg-white/15">
+                    {user.image ? (
+                      <Image src={user.image} alt="" width={36} height={36} className="h-9 w-9 object-cover" />
+                    ) : (
+                      <UserIcon className="h-4 w-4" />
+                    )}
+                  </span>
+                  <span className="text-sm font-semibold">{user.name ?? "My account"}</span>
+                </div>
+                {user.role === "ADMIN" && (
+                  <Link href="/admin" onClick={() => setOpen(false)} className="flex items-center gap-2.5 rounded-xl px-4 py-2.5 text-sm font-medium text-white/90 hover:bg-white/10">
+                    <LayoutDashboard className="h-4 w-4 text-secondary" /> Admin Dashboard
+                  </Link>
+                )}
+                <Link href="/account" onClick={() => setOpen(false)} className="flex items-center gap-2.5 rounded-xl px-4 py-2.5 text-sm font-medium text-white/90 hover:bg-white/10">
+                  <UserIcon className="h-4 w-4 text-secondary" /> My Account
                 </Link>
-              </li>
-              <li>
                 <button
                   onClick={() => signOut({ callbackUrl: "/" })}
-                  className="flex w-full items-center gap-2 rounded-lg px-3 py-3 text-left text-base font-medium text-accent hover:bg-surface"
+                  className="flex w-full items-center gap-2.5 rounded-xl px-4 py-2.5 text-left text-sm font-medium text-white/90 hover:bg-white/10"
                 >
-                  <LogOut className="h-4 w-4" /> Sign out
+                  <LogOut className="h-4 w-4 text-secondary" /> Sign out
                 </button>
-              </li>
-            </>
-          ) : (
-            <li className="mt-2 flex items-center gap-3 px-3">
-              <Button href="/login" variant="outline" size="sm" className="flex-1 border-primary/40 text-primary">
-                Login
-              </Button>
-              <Button href="/tours" size="sm" className="flex-1">
-                Explore Tours
-              </Button>
-            </li>
-          )}
-          <li className="mt-3 flex items-center gap-2 px-3 text-sm text-muted">
-            <Phone className="h-4 w-4 text-primary" /> +94 77 123 4567
-          </li>
-        </ul>
-      </div>
+              </div>
+            ) : (
+              <div className="flex flex-col gap-2.5 px-1">
+                <Button href="/tours" variant="secondary" className="w-full">
+                  Explore Tours
+                </Button>
+                <Link
+                  href="/login"
+                  onClick={() => setOpen(false)}
+                  className="rounded-full border border-white/40 px-5 py-2.5 text-center text-sm font-semibold text-white transition hover:bg-white/10"
+                >
+                  Login
+                </Link>
+              </div>
+            )}
+          </div>
+        </nav>
+
+        {/* Contact footer */}
+        <div className="border-t border-white/15 px-5 py-4 text-sm text-white/85">
+          <a href="tel:+94771234567" className="flex items-center gap-2">
+            <Phone className="h-4 w-4 text-secondary" /> +94 77 123 4567
+          </a>
+        </div>
+      </aside>
     </header>
   );
 }

@@ -14,9 +14,11 @@ import {
 import { Hero } from "@/components/home/hero";
 import { Testimonials } from "@/components/home/testimonials";
 import { TourCard } from "@/components/cards/tour-card";
+import { PostCard } from "@/components/cards/post-card";
 import { DestinationCard } from "@/components/cards/destination-card";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { Reveal } from "@/components/ui/reveal";
+import { CardScroller, scrollItem } from "@/components/ui/card-scroller";
 import { Button } from "@/components/ui/button";
 import { experiences, stats } from "@/lib/data";
 import {
@@ -79,20 +81,13 @@ export default async function HomePage() {
             </Button>
           </div>
 
-          <div className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-4">
+          <CardScroller cols="md:grid-cols-2 lg:grid-cols-4" className="mt-12">
             {featuredDestinations.map((d, idx) => (
-              <Reveal
-                key={d.slug}
-                delay={idx}
-                className={idx === 0 ? "lg:col-span-2 lg:row-span-2" : ""}
-              >
-                <DestinationCard
-                  destination={d}
-                  className={idx === 0 ? "h-full min-h-[300px]" : "h-full"}
-                />
+              <Reveal key={d.slug} delay={idx} className={scrollItem}>
+                <DestinationCard destination={d} className="h-full min-h-[360px]" />
               </Reveal>
             ))}
-          </div>
+          </CardScroller>
         </div>
       </section>
 
@@ -104,22 +99,22 @@ export default async function HomePage() {
             title="Travel by Experience"
             subtitle="Whatever moves you — wildlife, culture, coastline or adventure — we have a journey for it."
           />
-          <div className="mt-12 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
+          <CardScroller cols="md:grid-cols-3 lg:grid-cols-6" className="mt-12">
             {experiences.map((e) => (
               <Link
                 key={e.name}
                 href="/tours"
-                className="group relative overflow-hidden rounded-2xl"
+                className="group relative w-[44%] shrink-0 snap-start overflow-hidden rounded-2xl sm:w-[31%] md:w-auto"
               >
                 <div className="relative aspect-[3/4]">
                   <Image
                     src={e.image}
                     alt={e.name}
                     fill
-                    sizes="(max-width:768px) 50vw, 16vw"
+                    sizes="(max-width:768px) 45vw, 16vw"
                     className="object-cover transition-transform duration-500 group-hover:scale-110"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/75 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
                 </div>
                 <div className="absolute inset-x-0 bottom-0 p-4 text-white">
                   <p className="font-heading text-sm font-semibold leading-tight">
@@ -129,7 +124,7 @@ export default async function HomePage() {
                 </div>
               </Link>
             ))}
-          </div>
+          </CardScroller>
         </div>
       </section>
 
@@ -149,13 +144,13 @@ export default async function HomePage() {
             </Button>
           </div>
 
-          <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <CardScroller cols="md:grid-cols-2 lg:grid-cols-3" className="mt-12">
             {featuredTours.map((t, i) => (
-              <Reveal key={t.slug} delay={i}>
+              <Reveal key={t.slug} delay={i} className={scrollItem}>
                 <TourCard tour={t} />
               </Reveal>
             ))}
-          </div>
+          </CardScroller>
         </div>
       </section>
 
@@ -168,7 +163,7 @@ export default async function HomePage() {
             title="Travel with people who know the island"
             subtitle="Local expertise, honest pricing and care at every step of your journey."
           />
-          <div className="mt-14 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-10 grid gap-3.5 sm:mt-14 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4">
             {[
               {
                 icon: Map,
@@ -194,13 +189,15 @@ export default async function HomePage() {
               <Reveal
                 key={f.title}
                 delay={i}
-                className="rounded-2xl bg-white/5 p-7 ring-1 ring-white/10 transition-colors hover:bg-white/10"
+                className="flex items-start gap-4 rounded-2xl bg-white/5 p-5 ring-1 ring-white/10 transition-colors hover:bg-white/10 sm:block sm:p-7"
               >
-                <span className="grid h-14 w-14 place-items-center rounded-xl bg-secondary text-[#3a2a00]">
-                  <f.icon className="h-7 w-7" />
+                <span className="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-secondary text-[#3a2a00] sm:h-14 sm:w-14">
+                  <f.icon className="h-6 w-6 sm:h-7 sm:w-7" />
                 </span>
-                <h3 className="mt-5 font-heading text-lg font-semibold">{f.title}</h3>
-                <p className="mt-2 text-sm text-white/70">{f.text}</p>
+                <div>
+                  <h3 className="font-heading text-lg font-semibold sm:mt-5">{f.title}</h3>
+                  <p className="mt-1 text-sm text-white/70 sm:mt-2">{f.text}</p>
+                </div>
               </Reveal>
             ))}
           </div>
@@ -271,44 +268,13 @@ export default async function HomePage() {
             </Button>
           </div>
 
-          <div className="mt-12 grid gap-6 md:grid-cols-3">
-            {posts.map((p) => (
-              <Link
-                key={p.slug}
-                href={`/blog/${p.slug}`}
-                className="group overflow-hidden rounded-2xl bg-white shadow-[var(--shadow-card)] ring-1 ring-border/60 transition hover:-translate-y-1"
-              >
-                <div className="relative aspect-[16/10] overflow-hidden">
-                  <Image
-                    src={p.image}
-                    alt={p.title}
-                    fill
-                    sizes="(max-width:768px) 100vw, 33vw"
-                    className="object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
-                  <span className="absolute left-4 top-4 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-primary">
-                    {p.category}
-                  </span>
-                </div>
-                <div className="p-5">
-                  <p className="text-xs text-muted">
-                    {new Date(p.date).toLocaleDateString("en-US", {
-                      day: "numeric",
-                      month: "long",
-                      year: "numeric",
-                    })}{" "}
-                    · {p.readMinutes} min read
-                  </p>
-                  <h3 className="mt-2 font-heading text-lg font-semibold leading-snug transition-colors group-hover:text-primary">
-                    {p.title}
-                  </h3>
-                  <p className="mt-2 line-clamp-2 text-sm text-muted">
-                    {p.excerpt}
-                  </p>
-                </div>
-              </Link>
+          <CardScroller cols="md:grid-cols-3" className="mt-12">
+            {posts.map((p, i) => (
+              <Reveal key={p.slug} delay={i} className={scrollItem}>
+                <PostCard post={p} />
+              </Reveal>
             ))}
-          </div>
+          </CardScroller>
         </div>
       </section>
 

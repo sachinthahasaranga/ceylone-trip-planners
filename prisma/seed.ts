@@ -83,19 +83,33 @@ async function main() {
     { slug: "grand-tour-of-ceylon-12d", title: "Grand Tour of Ceylon", summary: "The complete 12-day island loop — culture, wildlife, mountains, beaches.", image: img("photo-1588416936097-41850ab3d86d"), price: 1650, days: 12, nights: 11, difficulty: "Moderate", featured: true },
   ];
 
+  // Extra imagery pool so each tour has a multi-image gallery to showcase.
+  const galleryPool = [
+    "photo-1588416936097-41850ab3d86d",
+    "photo-1566296314736-6eaac1ca0cb9",
+    "photo-1507525428034-b723cf961d3e",
+    "photo-1549366021-9f761d450615",
+    "photo-1602216056096-3b40cc0c9944",
+    "photo-1512100356356-de1b84283e18",
+  ];
+
   for (const t of tours) {
     const html = `<p>${t.summary}</p><p>This ${t.days}-day journey is designed to immerse you in the very best of Sri Lanka. Travel in comfort with a private guide, stay in characterful boutique properties and experience a seamless blend of iconic sights and authentic local moments — all at a relaxed, unhurried pace.</p><h3>Why you'll love it</h3><ul><li>Handpicked boutique accommodation</li><li>Private chauffeur guide throughout</li><li>A balance of must-see highlights and hidden gems</li></ul>`;
+    const gallery = Array.from(
+      new Set([t.image, ...galleryPool.map((id) => img(id, 1400))])
+    ).slice(0, 6);
+    // price left at 0 = hidden ("Price on request"), since rates vary by hotel.
     await prisma.tourPackage.upsert({
       where: { slug: t.slug },
-      update: { description: html },
+      update: { description: html, gallery, price: 0 },
       create: {
         slug: t.slug,
         title: t.title,
         summary: t.summary,
         description: html,
         coverImage: t.image,
-        gallery: [t.image],
-        price: t.price,
+        gallery,
+        price: 0,
         durationDays: t.days,
         durationNights: t.nights,
         difficulty: t.difficulty,

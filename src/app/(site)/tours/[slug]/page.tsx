@@ -10,10 +10,12 @@ import {
   X,
   MapPin,
   CalendarDays,
+  ChevronDown,
 } from "lucide-react";
 import { PageHeader } from "@/components/ui/page-header";
 import { TourCard } from "@/components/cards/tour-card";
 import { BookingForm } from "@/components/forms/booking-form";
+import { TourGallery } from "@/components/tours/tour-gallery";
 import { RichText } from "@/components/ui/rich-text";
 import { Button } from "@/components/ui/button";
 import { formatPrice } from "@/lib/utils";
@@ -87,17 +89,37 @@ export default async function TourDetailPage({
         crumbs={[{ label: "Tours", href: "/tours" }, { label: tour.title }]}
       />
 
-      <section className="py-14 lg:py-20">
-        <div className="container-px mx-auto grid max-w-[90rem] gap-10 lg:grid-cols-[1fr_380px]">
+      <section className="py-12 sm:py-14 lg:py-20">
+        <div className="container-px mx-auto grid max-w-[90rem] gap-8 lg:grid-cols-[1fr_380px] lg:gap-10">
           {/* Main */}
-          <div>
+          <div className="min-w-0">
             {/* Quick facts */}
-            <div className="grid grid-cols-2 gap-4 rounded-2xl bg-surface p-5 sm:grid-cols-4">
+            <div className="grid grid-cols-2 gap-3 rounded-2xl bg-surface p-4 sm:grid-cols-4 sm:gap-4 sm:p-5">
               <Fact icon={<Clock />} label="Duration" value={`${tour.durationDays}D / ${tour.durationNights}N`} />
               <Fact icon={<Users />} label="Group" value="Private" />
               <Fact icon={<Mountain />} label="Level" value={tour.difficulty} />
               <Fact icon={<Star />} label="Rating" value={`${tour.rating.toFixed(1)}/5`} />
             </div>
+
+            {/* Mobile-only quick CTA (the full booking card sits lower on mobile) */}
+            <a
+              href="#book"
+              className="mt-5 flex items-center justify-between rounded-2xl border border-primary/30 bg-primary/5 px-4 py-3 lg:hidden"
+            >
+              <span>
+                <span className="block text-xs text-muted">
+                  {tour.price && tour.price > 0 ? "From" : "Pricing"}
+                </span>
+                <span className="font-heading text-lg font-semibold text-primary">
+                  {tour.price && tour.price > 0
+                    ? formatPrice(tour.price)
+                    : "Price on request"}
+                </span>
+              </span>
+              <span className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-white">
+                Request to Book
+              </span>
+            </a>
 
             <div className="mt-10 max-w-none">
               <h2 className="font-heading text-2xl font-semibold">Overview</h2>
@@ -127,17 +149,26 @@ export default async function TourDetailPage({
 
             {/* Itinerary */}
             <h2 className="mt-12 font-heading text-2xl font-semibold">Day-by-Day Itinerary</h2>
-            <div className="mt-6 space-y-4">
+            <div className="mt-6 space-y-3">
               {itinerary.map((d) => (
-                <div key={d.day} className="relative rounded-2xl border border-border bg-white p-6 pl-16">
-                  <span className="absolute left-5 top-6 grid h-8 w-8 place-items-center rounded-full bg-primary text-sm font-semibold text-white">
-                    {d.day}
-                  </span>
-                  <h3 className="font-heading text-lg font-semibold">
-                    Day {d.day}: {d.title}
-                  </h3>
-                  <p className="mt-1.5 text-sm text-muted">{d.text}</p>
-                </div>
+                <details
+                  key={d.day}
+                  open={d.day === 1}
+                  className="group rounded-2xl border border-border bg-white [&_summary::-webkit-details-marker]:hidden"
+                >
+                  <summary className="flex cursor-pointer list-none items-center gap-3 p-4 sm:p-5">
+                    <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-primary text-sm font-semibold text-white">
+                      {d.day}
+                    </span>
+                    <h3 className="flex-1 font-heading text-base font-semibold sm:text-lg">
+                      Day {d.day}: {d.title}
+                    </h3>
+                    <ChevronDown className="h-5 w-5 shrink-0 text-muted transition-transform duration-300 group-open:rotate-180" />
+                  </summary>
+                  <p className="px-4 pb-4 pl-[3.75rem] text-sm text-muted sm:px-5 sm:pb-5 sm:pl-[4rem]">
+                    {d.text}
+                  </p>
+                </details>
               ))}
             </div>
 
@@ -166,18 +197,44 @@ export default async function TourDetailPage({
                 </ul>
               </div>
             </div>
+
+            {/* Tour gallery */}
+            {tour.gallery && tour.gallery.length > 1 && (
+              <div className="mt-12">
+                <h2 className="font-heading text-2xl font-semibold">Tour Gallery</h2>
+                <p className="mt-1 text-sm text-muted">
+                  A glimpse of the places and experiences on this journey.
+                </p>
+                <div className="mt-5">
+                  <TourGallery images={tour.gallery} title={tour.title} />
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Sticky booking sidebar */}
-          <aside className="lg:sticky lg:top-24 lg:self-start">
+          <aside id="book" className="min-w-0 scroll-mt-24 lg:sticky lg:top-24 lg:self-start">
             <div className="rounded-2xl border border-border bg-white p-6 shadow-[var(--shadow-card)]">
               <div className="flex items-end justify-between">
                 <div>
-                  <span className="text-sm text-muted">From</span>
-                  <p className="font-heading text-3xl font-semibold text-primary">
-                    {formatPrice(tour.price)}
-                  </p>
-                  <span className="text-xs text-muted">per person</span>
+                  {tour.price && tour.price > 0 ? (
+                    <>
+                      <span className="text-sm text-muted">From</span>
+                      <p className="font-heading text-3xl font-semibold text-primary">
+                        {formatPrice(tour.price)}
+                      </p>
+                      <span className="text-xs text-muted">per person</span>
+                    </>
+                  ) : (
+                    <>
+                      <p className="font-heading text-2xl font-semibold text-primary">
+                        Price on request
+                      </p>
+                      <span className="text-xs text-muted">
+                        Rates vary by season &amp; hotel choice
+                      </span>
+                    </>
+                  )}
                 </div>
                 <span className="flex items-center gap-1 rounded-full bg-secondary/15 px-3 py-1 text-sm font-semibold text-[#8a5a00]">
                   <Star className="h-4 w-4 fill-secondary text-secondary" />
@@ -187,7 +244,7 @@ export default async function TourDetailPage({
 
               <div className="mt-5 flex items-center gap-2 rounded-xl bg-surface p-3 text-sm text-muted">
                 <CalendarDays className="h-4 w-4 text-primary" />
-                Free cancellation up to 30 days before travel
+                Free tailor-made quote within 24 hours
               </div>
 
               <div className="mt-6">
