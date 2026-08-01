@@ -38,7 +38,7 @@ export default function AboutPage() {
 
       {/* Story */}
       <section className="py-16 lg:py-24">
-        <div className="container-px mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-2">
+        <div className="container-px mx-auto grid max-w-[90rem] items-center gap-12 lg:grid-cols-2">
           <div className="relative">
             <div className="relative aspect-[4/5] overflow-hidden rounded-2xl">
               <Image
@@ -50,7 +50,7 @@ export default function AboutPage() {
               />
             </div>
             <div className="absolute -bottom-6 -right-4 rounded-2xl bg-primary px-8 py-6 text-white shadow-lg sm:-right-6">
-              <p className="font-heading text-4xl font-bold">12+</p>
+              <p className="font-heading text-4xl font-semibold">12+</p>
               <p className="text-sm text-white/80">Years of journeys</p>
             </div>
           </div>
@@ -83,10 +83,10 @@ export default function AboutPage() {
 
       {/* Stats */}
       <section className="bg-primary py-14 text-white">
-        <div className="container-px mx-auto grid max-w-7xl grid-cols-2 gap-6 lg:grid-cols-4">
+        <div className="container-px mx-auto grid max-w-[90rem] grid-cols-2 gap-6 lg:grid-cols-4">
           {stats.map((s) => (
             <div key={s.label} className="text-center">
-              <p className="font-heading text-3xl font-bold sm:text-4xl">{s.value}</p>
+              <p className="font-heading text-3xl font-semibold sm:text-4xl">{s.value}</p>
               <p className="mt-1 text-sm text-white/80">{s.label}</p>
             </div>
           ))}
@@ -95,7 +95,7 @@ export default function AboutPage() {
 
       {/* Values */}
       <section className="py-16 lg:py-24">
-        <div className="container-px mx-auto max-w-7xl">
+        <div className="container-px mx-auto max-w-[90rem]">
           <SectionHeading
             eyebrow="What we stand for"
             title="Our values"
@@ -107,7 +107,7 @@ export default function AboutPage() {
                 <span className="mx-auto grid h-14 w-14 place-items-center rounded-xl bg-primary/10 text-primary">
                   <v.icon className="h-7 w-7" />
                 </span>
-                <h3 className="mt-4 font-heading text-lg font-bold">{v.title}</h3>
+                <h3 className="mt-4 font-heading text-lg font-semibold">{v.title}</h3>
                 <p className="mt-2 text-sm text-muted">{v.text}</p>
               </div>
             ))}
@@ -117,7 +117,7 @@ export default function AboutPage() {
 
       {/* Team */}
       <section className="bg-surface py-16 lg:py-24">
-        <div className="container-px mx-auto max-w-7xl">
+        <div className="container-px mx-auto max-w-[90rem]">
           <SectionHeading
             eyebrow="The people"
             title="Meet the team"
@@ -130,7 +130,7 @@ export default function AboutPage() {
                   <Image src={m.img} alt={m.name} fill sizes="25vw" className="object-cover transition-transform duration-500 group-hover:scale-105" />
                 </div>
                 <div className="p-5 text-center">
-                  <h3 className="font-heading text-lg font-bold">{m.name}</h3>
+                  <h3 className="font-heading text-lg font-semibold">{m.name}</h3>
                   <p className="text-sm text-primary">{m.role}</p>
                 </div>
               </div>

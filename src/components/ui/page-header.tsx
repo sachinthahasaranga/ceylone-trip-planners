@@ -19,7 +19,7 @@ export function PageHeader({
     <section className="relative flex min-h-[52vh] items-end overflow-hidden pt-20">
       <Image src={image} alt={title} fill priority sizes="100vw" className="object-cover" />
       <div className="absolute inset-0 bg-gradient-to-t from-[#0a1a17]/90 via-black/40 to-black/30" />
-      <div className="container-px relative mx-auto w-full max-w-7xl pb-12">
+      <div className="container-px relative mx-auto w-full max-w-[90rem] pb-12">
         <nav className="mb-3 flex items-center gap-1.5 text-sm text-white/70">
           <Link href="/" className="hover:text-secondary">
             Home
@@ -37,7 +37,7 @@ export function PageHeader({
             </span>
           ))}
         </nav>
-        <h1 className="max-w-3xl font-heading text-4xl font-bold text-white text-balance sm:text-5xl">
+        <h1 className="max-w-3xl font-heading text-4xl font-semibold text-white text-balance sm:text-5xl">
           {title}
         </h1>
         {subtitle && (

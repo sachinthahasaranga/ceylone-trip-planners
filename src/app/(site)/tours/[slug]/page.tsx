@@ -14,6 +14,7 @@ import {
 import { PageHeader } from "@/components/ui/page-header";
 import { TourCard } from "@/components/cards/tour-card";
 import { BookingForm } from "@/components/forms/booking-form";
+import { RichText } from "@/components/ui/rich-text";
 import { Button } from "@/components/ui/button";
 import { formatPrice } from "@/lib/utils";
 import { getTour, getTours } from "@/lib/queries";
@@ -87,7 +88,7 @@ export default async function TourDetailPage({
       />
 
       <section className="py-14 lg:py-20">
-        <div className="container-px mx-auto grid max-w-7xl gap-10 lg:grid-cols-[1fr_380px]">
+        <div className="container-px mx-auto grid max-w-[90rem] gap-10 lg:grid-cols-[1fr_380px]">
           {/* Main */}
           <div>
             {/* Quick facts */}
@@ -98,19 +99,21 @@ export default async function TourDetailPage({
               <Fact icon={<Star />} label="Rating" value={`${tour.rating.toFixed(1)}/5`} />
             </div>
 
-            <div className="prose mt-10 max-w-none">
-              <h2 className="font-heading text-2xl font-bold">Overview</h2>
-              <p className="mt-3 leading-relaxed text-muted">
-                {tour.summary} This {tour.durationDays}-day {tour.category.toLowerCase()} journey
-                is designed to immerse you in the very best of Sri Lanka. Travel
-                in comfort with a private guide, stay in characterful boutique
-                properties and experience a seamless blend of iconic sights and
-                authentic local moments — all at a relaxed, unhurried pace.
-              </p>
+            <div className="mt-10 max-w-none">
+              <h2 className="font-heading text-2xl font-semibold">Overview</h2>
+              {tour.description ? (
+                <RichText html={tour.description} className="mt-3" />
+              ) : (
+                <p className="mt-3 leading-relaxed text-muted">
+                  {tour.summary} This {tour.durationDays}-day{" "}
+                  {tour.category.toLowerCase()} journey is designed to immerse you
+                  in the very best of Sri Lanka.
+                </p>
+              )}
             </div>
 
             {/* Highlights */}
-            <h2 className="mt-10 font-heading text-2xl font-bold">Trip Highlights</h2>
+            <h2 className="mt-10 font-heading text-2xl font-semibold">Trip Highlights</h2>
             <div className="mt-4 grid gap-3 sm:grid-cols-2">
               {tour.highlights.map((h) => (
                 <div key={h} className="flex items-center gap-3 rounded-xl border border-border bg-white p-4">
@@ -123,14 +126,14 @@ export default async function TourDetailPage({
             </div>
 
             {/* Itinerary */}
-            <h2 className="mt-12 font-heading text-2xl font-bold">Day-by-Day Itinerary</h2>
+            <h2 className="mt-12 font-heading text-2xl font-semibold">Day-by-Day Itinerary</h2>
             <div className="mt-6 space-y-4">
               {itinerary.map((d) => (
                 <div key={d.day} className="relative rounded-2xl border border-border bg-white p-6 pl-16">
-                  <span className="absolute left-5 top-6 grid h-8 w-8 place-items-center rounded-full bg-primary text-sm font-bold text-white">
+                  <span className="absolute left-5 top-6 grid h-8 w-8 place-items-center rounded-full bg-primary text-sm font-semibold text-white">
                     {d.day}
                   </span>
-                  <h3 className="font-heading text-lg font-bold">
+                  <h3 className="font-heading text-lg font-semibold">
                     Day {d.day}: {d.title}
                   </h3>
                   <p className="mt-1.5 text-sm text-muted">{d.text}</p>
@@ -141,7 +144,7 @@ export default async function TourDetailPage({
             {/* Inclusions / exclusions */}
             <div className="mt-12 grid gap-6 sm:grid-cols-2">
               <div className="rounded-2xl border border-border bg-white p-6">
-                <h3 className="font-heading text-lg font-bold">What&apos;s included</h3>
+                <h3 className="font-heading text-lg font-semibold">What&apos;s included</h3>
                 <ul className="mt-4 space-y-2.5">
                   {inclusions.map((x) => (
                     <li key={x} className="flex gap-3 text-sm text-muted">
@@ -152,7 +155,7 @@ export default async function TourDetailPage({
                 </ul>
               </div>
               <div className="rounded-2xl border border-border bg-white p-6">
-                <h3 className="font-heading text-lg font-bold">Not included</h3>
+                <h3 className="font-heading text-lg font-semibold">Not included</h3>
                 <ul className="mt-4 space-y-2.5">
                   {exclusions.map((x) => (
                     <li key={x} className="flex gap-3 text-sm text-muted">
@@ -171,7 +174,7 @@ export default async function TourDetailPage({
               <div className="flex items-end justify-between">
                 <div>
                   <span className="text-sm text-muted">From</span>
-                  <p className="font-heading text-3xl font-bold text-primary">
+                  <p className="font-heading text-3xl font-semibold text-primary">
                     {formatPrice(tour.price)}
                   </p>
                   <span className="text-xs text-muted">per person</span>
@@ -201,9 +204,9 @@ export default async function TourDetailPage({
 
       {/* Related */}
       <section className="bg-surface py-16 lg:py-20">
-        <div className="container-px mx-auto max-w-7xl">
+        <div className="container-px mx-auto max-w-[90rem]">
           <div className="mb-8 flex items-end justify-between">
-            <h2 className="font-heading text-2xl font-bold sm:text-3xl">
+            <h2 className="font-heading text-2xl font-semibold sm:text-3xl">
               You may also like
             </h2>
             <Button href="/tours" variant="ghost">

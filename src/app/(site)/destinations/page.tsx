@@ -20,7 +20,7 @@ export default async function DestinationsPage() {
         image="https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?auto=format&fit=crop&w=2000&q=80"
       />
       <section className="py-16 lg:py-20">
-        <div className="container-px mx-auto max-w-7xl">
+        <div className="container-px mx-auto max-w-[90rem]">
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {destinations.map((d) => (
               <DestinationCard key={d.slug} destination={d} className="min-h-[340px]" />

@@ -27,10 +27,10 @@ export default function ContactPage() {
       />
 
       <section className="py-16 lg:py-24">
-        <div className="container-px mx-auto grid max-w-7xl gap-12 lg:grid-cols-[1fr_1.3fr]">
+        <div className="container-px mx-auto grid max-w-[90rem] gap-12 lg:grid-cols-[1fr_1.3fr]">
           {/* Info */}
           <div>
-            <h2 className="font-heading text-3xl font-bold">Talk to a local expert</h2>
+            <h2 className="font-heading text-3xl font-semibold">Talk to a local expert</h2>
             <p className="mt-3 leading-relaxed text-muted">
               Whether you have a question or you&apos;re ready to plan, we&apos;d
               love to hear from you. Reach out and a real person will get back to
@@ -69,13 +69,13 @@ export default function ContactPage() {
 
           {/* Form */}
           <div className="rounded-2xl border border-border bg-white p-6 shadow-[var(--shadow-card)] sm:p-8">
-            <h3 className="mb-6 font-heading text-2xl font-bold">Send us a message</h3>
+            <h3 className="mb-6 font-heading text-2xl font-semibold">Send us a message</h3>
             <ContactForm />
           </div>
         </div>
 
         {/* Map */}
-        <div className="container-px mx-auto mt-16 max-w-7xl">
+        <div className="container-px mx-auto mt-16 max-w-[90rem]">
           <div className="overflow-hidden rounded-2xl border border-border">
             <iframe
               title="Ceylon Trip Planners location"

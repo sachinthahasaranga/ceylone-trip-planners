@@ -39,7 +39,7 @@ export function TourCard({ tour }: { tour: Tour }) {
           </span>
         </div>
 
-        <h3 className="font-heading text-lg font-bold leading-snug text-text transition-colors group-hover:text-primary">
+        <h3 className="font-heading text-lg font-semibold leading-snug text-text transition-colors group-hover:text-primary">
           {tour.title}
         </h3>
         <p className="mt-2 line-clamp-2 flex-1 text-sm text-muted">
@@ -49,7 +49,7 @@ export function TourCard({ tour }: { tour: Tour }) {
         <div className="mt-4 flex items-end justify-between border-t border-border/70 pt-4">
           <div>
             <span className="text-xs text-muted">From</span>
-            <p className="font-heading text-xl font-bold text-primary">
+            <p className="font-heading text-xl font-semibold text-primary">
               {formatPrice(tour.price)}
               <span className="text-xs font-normal text-muted"> /person</span>
             </p>

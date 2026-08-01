@@ -1,8 +1,13 @@
 import type { MetadataRoute } from "next";
-import { destinations, tours, posts } from "@/lib/data";
+import { getDestinations, getTours, getPosts } from "@/lib/queries";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+  const [destinations, tours, posts] = await Promise.all([
+    getDestinations(),
+    getTours(),
+    getPosts(),
+  ]);
 
   const staticPages = [
     "",

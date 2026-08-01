@@ -9,6 +9,7 @@ import {
   SubmitButton,
 } from "@/components/admin/form";
 import { ImageUploader } from "@/components/admin/image-uploader";
+import { RichTextEditor } from "@/components/admin/rich-text-editor";
 
 export function BlogForm({ post }: { post?: BlogPost }) {
   const action = saveBlogPost.bind(null, post?.id ?? null);
@@ -31,14 +32,14 @@ export function BlogForm({ post }: { post?: BlogPost }) {
             </Field>
           </div>
           <div className="mt-4">
-            <Field label="Content" hint="Supports plain text / markdown">
-              <Textarea name="content" rows={12} defaultValue={post?.content ?? ""} />
+            <Field label="Content">
+              <RichTextEditor name="content" defaultValue={post?.content ?? ""} height="480px" />
             </Field>
           </div>
         </Card>
 
         <Card>
-          <h3 className="mb-4 font-heading text-lg font-bold">SEO</h3>
+          <h3 className="mb-4 font-heading text-lg font-semibold">SEO</h3>
           <div className="space-y-4">
             <Field label="Meta title">
               <Input name="metaTitle" defaultValue={post?.metaTitle ?? ""} />

@@ -24,10 +24,10 @@ export default function AuthLayout({
             <span className="grid h-10 w-10 place-items-center rounded-full bg-white/15 backdrop-blur">
               <Palmtree className="h-5 w-5" />
             </span>
-            <span className="font-heading text-xl font-bold">Ceylon Trip Planners</span>
+            <span className="font-heading text-xl font-semibold">Ceylon Trip Planners</span>
           </Link>
           <div>
-            <h2 className="font-heading text-4xl font-bold leading-tight">
+            <h2 className="font-heading text-4xl font-semibold leading-tight">
               Your Sri Lankan adventure starts here.
             </h2>
             <p className="mt-3 max-w-md text-white/80">
@@ -48,7 +48,7 @@ export default function AuthLayout({
             <span className="grid h-10 w-10 place-items-center rounded-full bg-primary text-white">
               <Palmtree className="h-5 w-5" />
             </span>
-            <span className="font-heading text-xl font-bold">Ceylon Trip Planners</span>
+            <span className="font-heading text-xl font-semibold">Ceylon Trip Planners</span>
           </Link>
           {children}
         </div>

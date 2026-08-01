@@ -3,11 +3,13 @@
 import Image from "next/image";
 import { useState } from "react";
 import { Star, Quote, ChevronLeft, ChevronRight } from "lucide-react";
-import { testimonials } from "@/lib/data";
+import type { Testimonial } from "@/lib/data";
 import { SectionHeading } from "@/components/ui/section-heading";
 
-export function Testimonials() {
+export function Testimonials({ testimonials }: { testimonials: Testimonial[] }) {
   const [i, setI] = useState(0);
+
+  if (!testimonials.length) return null;
   const t = testimonials[i];
 
   const go = (dir: number) =>
@@ -15,7 +17,7 @@ export function Testimonials() {
 
   return (
     <section className="bg-primary-dark py-20 text-white lg:py-28">
-      <div className="container-px mx-auto max-w-7xl">
+      <div className="container-px mx-auto max-w-[90rem]">
         <SectionHeading
           light
           eyebrow="Testimonials"

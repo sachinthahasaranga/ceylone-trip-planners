@@ -10,7 +10,8 @@ type Model =
   | "blogPost"
   | "booking"
   | "enquiry"
-  | "review";
+  | "review"
+  | "galleryImage";
 
 export function DeleteButton({
   model,

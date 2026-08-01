@@ -27,7 +27,7 @@ export default async function BlogPage() {
       />
 
       <section className="py-16 lg:py-20">
-        <div className="container-px mx-auto max-w-7xl">
+        <div className="container-px mx-auto max-w-[90rem]">
           {/* Featured */}
           <Link
             href={`/blog/${featured.slug}`}
@@ -40,7 +40,7 @@ export default async function BlogPage() {
               <span className="text-xs font-semibold uppercase tracking-widest text-primary">
                 Featured · {featured.category}
               </span>
-              <h2 className="mt-3 font-heading text-2xl font-bold leading-snug group-hover:text-primary sm:text-3xl">
+              <h2 className="mt-3 font-heading text-2xl font-semibold leading-snug group-hover:text-primary sm:text-3xl">
                 {featured.title}
               </h2>
               <p className="mt-3 text-muted">{featured.excerpt}</p>
@@ -89,7 +89,7 @@ export default async function BlogPage() {
                     })}{" "}
                     · {p.readMinutes} min read
                   </p>
-                  <h3 className="mt-2 font-heading text-lg font-bold leading-snug group-hover:text-primary">
+                  <h3 className="mt-2 font-heading text-lg font-semibold leading-snug group-hover:text-primary">
                     {p.title}
                   </h3>
                   <p className="mt-2 line-clamp-2 text-sm text-muted">{p.excerpt}</p>

@@ -31,9 +31,10 @@ export async function saveDestination(id: string | null, fd: FormData) {
   await assertAdmin();
   const name = str(fd, "name");
   const gallery = list(fd, "gallery");
+  const slug = str(fd, "slug") || slugify(name);
   const data = {
     name,
-    slug: str(fd, "slug") || slugify(name),
+    slug,
     region: str(fd, "region"),
     shortDesc: str(fd, "shortDesc"),
     description: str(fd, "description"),
@@ -51,6 +52,9 @@ export async function saveDestination(id: string | null, fd: FormData) {
   else await prisma.destination.create({ data });
 
   revalidatePath("/admin/destinations");
+  revalidatePath("/destinations");
+  revalidatePath(`/destinations/${slug}`);
+  revalidatePath("/");
   redirect("/admin/destinations");
 }
 
@@ -60,9 +64,10 @@ export async function saveTour(id: string | null, fd: FormData) {
   await assertAdmin();
   const title = str(fd, "title");
   const gallery = list(fd, "gallery");
+  const slug = str(fd, "slug") || slugify(title);
   const data = {
     title,
-    slug: str(fd, "slug") || slugify(title),
+    slug,
     summary: str(fd, "summary"),
     description: str(fd, "description"),
     coverImage: str(fd, "coverImage") || gallery[0] || null,
@@ -84,6 +89,9 @@ export async function saveTour(id: string | null, fd: FormData) {
   else await prisma.tourPackage.create({ data });
 
   revalidatePath("/admin/tours");
+  revalidatePath("/tours");
+  revalidatePath(`/tours/${slug}`);
+  revalidatePath("/");
   redirect("/admin/tours");
 }
 
@@ -92,9 +100,10 @@ export async function saveTour(id: string | null, fd: FormData) {
 export async function saveBlogPost(id: string | null, fd: FormData) {
   await assertAdmin();
   const title = str(fd, "title");
+  const slug = str(fd, "slug") || slugify(title);
   const data = {
     title,
-    slug: str(fd, "slug") || slugify(title),
+    slug,
     excerpt: str(fd, "excerpt"),
     content: str(fd, "content"),
     coverImage: str(fd, "coverImage") || null,
@@ -111,6 +120,9 @@ export async function saveBlogPost(id: string | null, fd: FormData) {
   else await prisma.blogPost.create({ data });
 
   revalidatePath("/admin/blog");
+  revalidatePath("/blog");
+  revalidatePath(`/blog/${slug}`);
+  revalidatePath("/");
   redirect("/admin/blog");
 }
 
@@ -140,17 +152,53 @@ export async function updateReview(id: string, data: { approved?: boolean; featu
   await assertAdmin();
   await prisma.review.update({ where: { id }, data });
   revalidatePath("/admin/reviews");
+  revalidatePath("/reviews");
+  revalidatePath("/");
+}
+
+/* --------------------------------- Gallery ------------------------------- */
+
+export async function addGalleryImages(fd: FormData) {
+  await assertAdmin();
+  const urls = list(fd, "urls");
+  const caption = str(fd, "caption") || null;
+  const category = str(fd, "category") || null;
+  if (urls.length === 0) return;
+
+  const start = await prisma.galleryImage.count();
+  await prisma.galleryImage.createMany({
+    data: urls.map((url, i) => ({ url, caption, category, order: start + i })),
+  });
+  revalidatePath("/admin/gallery");
+  revalidatePath("/gallery");
 }
 
 /* --------------------------------- Generic delete ------------------------ */
 
-type Model = "destination" | "tourPackage" | "blogPost" | "booking" | "enquiry" | "review";
+type Model =
+  | "destination"
+  | "tourPackage"
+  | "blogPost"
+  | "booking"
+  | "enquiry"
+  | "review"
+  | "galleryImage";
 
 export async function deleteRecord(model: Model, id: string, path: string) {
   await assertAdmin();
   // @ts-expect-error dynamic model access
   await prisma[model].delete({ where: { id } });
   revalidatePath(path);
+  // Refresh matching public pages
+  const publicPath: Partial<Record<Model, string>> = {
+    destination: "/destinations",
+    tourPackage: "/tours",
+    blogPost: "/blog",
+    review: "/reviews",
+    galleryImage: "/gallery",
+  };
+  if (publicPath[model]) revalidatePath(publicPath[model]!);
+  revalidatePath("/");
 }
 
 /* --------------------------------- Settings ------------------------------ */

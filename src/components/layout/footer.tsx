@@ -34,7 +34,7 @@ export function Footer() {
   return (
     <footer className="bg-[#0a1a17] text-white/80">
       {/* Newsletter band */}
-      <div className="container-px mx-auto max-w-7xl">
+      <div className="container-px mx-auto max-w-[90rem]">
         <div className="-mb-10 translate-y-[-2.5rem] rounded-2xl bg-primary px-6 py-8 shadow-[var(--shadow-card)] sm:px-10 md:flex md:items-center md:justify-between">
           <div className="max-w-md">
             <h3 className="font-heading text-2xl text-white">
@@ -50,7 +50,7 @@ export function Footer() {
         </div>
       </div>
 
-      <div className="container-px mx-auto max-w-7xl pt-24 pb-10">
+      <div className="container-px mx-auto max-w-[90rem] pt-24 pb-10">
         <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-5">
           {/* Brand */}
           <div className="lg:col-span-2">
@@ -58,7 +58,7 @@ export function Footer() {
               <span className="grid h-10 w-10 place-items-center rounded-full bg-primary text-white">
                 <Palmtree className="h-5 w-5" />
               </span>
-              <span className="font-heading text-xl font-bold text-white">
+              <span className="font-heading text-xl font-semibold text-white">
                 Ceylon Trip Planners
               </span>
             </Link>

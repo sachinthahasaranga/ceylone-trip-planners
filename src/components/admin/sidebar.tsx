@@ -11,6 +11,7 @@ import {
   CalendarCheck,
   MessagesSquare,
   Star,
+  Images,
   Users,
   Settings,
   Palmtree,
@@ -26,6 +27,7 @@ const nav = [
   { href: "/admin/destinations", label: "Destinations", icon: MapPin },
   { href: "/admin/tours", label: "Tour Packages", icon: Package },
   { href: "/admin/blog", label: "Blog", icon: Newspaper },
+  { href: "/admin/gallery", label: "Gallery", icon: Images },
   { href: "/admin/bookings", label: "Bookings", icon: CalendarCheck },
   { href: "/admin/enquiries", label: "Enquiries", icon: MessagesSquare },
   { href: "/admin/reviews", label: "Reviews", icon: Star },
@@ -45,7 +47,7 @@ export function AdminSidebar({ userName }: { userName?: string | null }) {
           <span className="grid h-8 w-8 place-items-center rounded-full bg-primary text-white">
             <Palmtree className="h-4 w-4" />
           </span>
-          <span className="font-heading font-bold">Admin</span>
+          <span className="font-heading font-semibold">Admin</span>
         </Link>
         <button onClick={() => setOpen((v) => !v)} className="p-2">
           {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -63,7 +65,7 @@ export function AdminSidebar({ userName }: { userName?: string | null }) {
             <Palmtree className="h-5 w-5" />
           </span>
           <div className="leading-tight">
-            <p className="font-heading font-bold">Ceylon</p>
+            <p className="font-heading font-semibold">Ceylon</p>
             <p className="text-[0.65rem] uppercase tracking-widest text-primary">
               Admin Panel
             </p>

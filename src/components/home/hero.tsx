@@ -31,14 +31,14 @@ export function Hero() {
       />
       <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-[#0a1a17]/90" />
 
-      <div className="container-px relative mx-auto w-full max-w-7xl pt-28 pb-16">
+      <div className="container-px relative mx-auto w-full max-w-[90rem] pt-28 pb-16">
         <div className="max-w-3xl">
           <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-1.5 text-sm font-medium text-white backdrop-blur">
             <Star className="h-4 w-4 fill-secondary text-secondary" />
             Rated 4.9/5 by 8,500+ travelers
           </span>
 
-          <h1 className="mt-6 font-heading text-4xl font-bold leading-[1.1] text-white text-balance sm:text-5xl lg:text-6xl xl:text-7xl">
+          <h1 className="mt-6 font-heading text-4xl font-semibold leading-[1.1] text-white text-balance sm:text-5xl lg:text-6xl xl:text-7xl">
             Discover the Wonder of{" "}
             <span className="text-secondary">Sri Lanka</span>
           </h1>

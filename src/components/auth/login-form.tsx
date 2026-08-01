@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { signIn } from "next-auth/react";
+import { signIn, getSession } from "next-auth/react";
 import { Loader2 } from "lucide-react";
 
 export function LoginForm() {
@@ -21,11 +21,14 @@ export function LoginForm() {
       password,
       redirect: false,
     });
-    setLoading(false);
     if (res?.error) {
+      setLoading(false);
       setError("Invalid email or password.");
     } else {
-      router.push("/account");
+      // Route by role: admins land on the dashboard, everyone else on account
+      const session = await getSession();
+      const dest = session?.user?.role === "ADMIN" ? "/admin" : "/account";
+      router.push(dest);
       router.refresh();
     }
   }

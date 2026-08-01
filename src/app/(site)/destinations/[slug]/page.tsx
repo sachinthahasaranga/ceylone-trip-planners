@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { Check, Calendar, MapPin } from "lucide-react";
 import { PageHeader } from "@/components/ui/page-header";
 import { TourCard } from "@/components/cards/tour-card";
+import { RichText } from "@/components/ui/rich-text";
 import { Button } from "@/components/ui/button";
 import { getDestination, getDestinations } from "@/lib/queries";
 import { getTours } from "@/lib/queries";
@@ -52,20 +53,19 @@ export default async function DestinationDetailPage({
       />
 
       <section className="py-14 lg:py-20">
-        <div className="container-px mx-auto grid max-w-7xl gap-10 lg:grid-cols-[1fr_340px]">
+        <div className="container-px mx-auto grid max-w-[90rem] gap-10 lg:grid-cols-[1fr_340px]">
           <div>
             <span className="inline-flex items-center gap-1.5 text-sm font-medium text-primary">
               <MapPin className="h-4 w-4" /> {d.region}
             </span>
-            <h2 className="mt-2 font-heading text-3xl font-bold">About {d.name}</h2>
-            <p className="mt-4 leading-relaxed text-muted">
-              {d.shortDesc} A visit here is a highlight of any Sri Lanka
-              itinerary — rich in history, scenery and photo opportunities. Our
-              local guides know exactly when to arrive to beat the crowds and
-              where to find the most memorable views.
-            </p>
+            <h2 className="mt-2 font-heading text-3xl font-semibold">About {d.name}</h2>
+            {d.description ? (
+              <RichText html={d.description} className="mt-4" />
+            ) : (
+              <p className="mt-4 leading-relaxed text-muted">{d.shortDesc}</p>
+            )}
 
-            <h3 className="mt-10 font-heading text-2xl font-bold">Highlights</h3>
+            <h3 className="mt-10 font-heading text-2xl font-semibold">Highlights</h3>
             <div className="mt-4 grid gap-3 sm:grid-cols-2">
               {d.highlights.map((h) => (
                 <div
@@ -87,7 +87,7 @@ export default async function DestinationDetailPage({
 
           <aside className="space-y-5 lg:sticky lg:top-24 lg:self-start">
             <div className="rounded-2xl border border-border bg-white p-6 shadow-[var(--shadow-card)]">
-              <h4 className="font-heading text-lg font-bold">Good to know</h4>
+              <h4 className="font-heading text-lg font-semibold">Good to know</h4>
               <ul className="mt-4 space-y-3 text-sm text-muted">
                 <li className="flex gap-3">
                   <Calendar className="h-4 w-4 shrink-0 text-primary" />
@@ -107,8 +107,8 @@ export default async function DestinationDetailPage({
       </section>
 
       <section className="bg-surface py-16 lg:py-20">
-        <div className="container-px mx-auto max-w-7xl">
-          <h2 className="mb-8 font-heading text-2xl font-bold sm:text-3xl">
+        <div className="container-px mx-auto max-w-[90rem]">
+          <h2 className="mb-8 font-heading text-2xl font-semibold sm:text-3xl">
             Tours featuring {d.name}
           </h2>
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">

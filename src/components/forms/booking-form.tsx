@@ -47,7 +47,7 @@ export function BookingForm({
     return (
       <div className="rounded-xl bg-primary/10 p-6 text-center">
         <CheckCircle2 className="mx-auto h-10 w-10 text-primary" />
-        <h4 className="mt-3 font-heading text-lg font-bold text-primary">
+        <h4 className="mt-3 font-heading text-lg font-semibold text-primary">
           Enquiry sent!
         </h4>
         <p className="mt-1 text-sm text-muted">

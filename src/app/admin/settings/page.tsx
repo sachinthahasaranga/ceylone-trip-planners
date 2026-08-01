@@ -26,7 +26,7 @@ export default async function AdminSettingsPage() {
 
       <form action={saveSettings} className="grid gap-6 lg:grid-cols-2">
         <Card>
-          <h3 className="mb-4 font-heading text-lg font-bold">General</h3>
+          <h3 className="mb-4 font-heading text-lg font-semibold">General</h3>
           <div className="space-y-4">
             <Field label="Site name">
               <Input name="siteName" defaultValue={s?.siteName ?? "Ceylon Trip Planners"} />
@@ -44,7 +44,7 @@ export default async function AdminSettingsPage() {
         </Card>
 
         <Card>
-          <h3 className="mb-4 font-heading text-lg font-bold">Contact</h3>
+          <h3 className="mb-4 font-heading text-lg font-semibold">Contact</h3>
           <div className="space-y-4">
             <Field label="Phone">
               <Input name="phone" defaultValue={s?.phone ?? ""} />
@@ -62,7 +62,7 @@ export default async function AdminSettingsPage() {
         </Card>
 
         <Card>
-          <h3 className="mb-4 font-heading text-lg font-bold">Social</h3>
+          <h3 className="mb-4 font-heading text-lg font-semibold">Social</h3>
           <div className="space-y-4">
             <Field label="Facebook URL">
               <Input name="facebook" defaultValue={s?.facebook ?? ""} />
@@ -74,7 +74,7 @@ export default async function AdminSettingsPage() {
         </Card>
 
         <Card>
-          <h3 className="mb-4 font-heading text-lg font-bold">Default SEO</h3>
+          <h3 className="mb-4 font-heading text-lg font-semibold">Default SEO</h3>
           <div className="space-y-4">
             <Field label="Meta title">
               <Input name="metaTitle" defaultValue={s?.metaTitle ?? ""} />

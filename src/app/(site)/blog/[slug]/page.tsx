@@ -4,6 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CalendarDays, Clock, User } from "lucide-react";
 import { PageHeader } from "@/components/ui/page-header";
+import { RichText } from "@/components/ui/rich-text";
 import { getPost, getPosts } from "@/lib/queries";
 
 export async function generateStaticParams() {
@@ -64,38 +65,23 @@ export default async function BlogDetailPage({
             </span>
           </div>
 
-          <div className="prose prose-lg mt-8 max-w-none text-muted">
-            <p className="text-lg leading-relaxed">{p.excerpt}</p>
-            <p className="mt-6 leading-relaxed">
-              Sri Lanka packs extraordinary variety into a compact island —
-              ancient kingdoms, mist-wrapped tea country, wildlife-rich national
-              parks and a coastline of golden beaches. In this guide we share the
-              practical know-how and local insight that make the difference
-              between a good trip and an unforgettable one.
-            </p>
-            <h2 className="mt-8 font-heading text-2xl font-bold text-text">
-              Planning your journey
-            </h2>
-            <p className="mt-3 leading-relaxed">
-              The key to a great Sri Lankan holiday is pacing. Distances look
-              small on a map, but winding mountain roads mean travel takes
-              longer than expected. We recommend basing yourself in a region for
-              two or three nights rather than moving every day — it leaves room
-              to slow down and truly experience each place.
-            </p>
-            <blockquote className="mt-6 border-l-4 border-primary bg-surface p-5 font-heading text-lg italic text-text">
-              “Travel slowly, eat everything, and always say yes to a cup of
-              Ceylon tea.”
-            </blockquote>
-            <p className="mt-6 leading-relaxed">
-              Ready to experience it for yourself? Our team can craft a
-              personalised itinerary around exactly the experiences you care
-              about most.
-            </p>
+          <div className="mt-8">
+            {p.excerpt && (
+              <p className="text-lg font-medium leading-relaxed text-text">
+                {p.excerpt}
+              </p>
+            )}
+            {p.content ? (
+              <RichText html={p.content} className="mt-6" />
+            ) : (
+              <p className="mt-6 leading-relaxed text-muted">
+                Full article coming soon.
+              </p>
+            )}
           </div>
 
           <div className="mt-10 rounded-2xl bg-primary p-8 text-center text-white">
-            <h3 className="font-heading text-2xl font-bold">
+            <h3 className="font-heading text-2xl font-semibold">
               Plan your Sri Lanka trip with us
             </h3>
             <p className="mt-2 text-white/85">
@@ -112,8 +98,8 @@ export default async function BlogDetailPage({
       </article>
 
       <section className="bg-surface py-16">
-        <div className="container-px mx-auto max-w-7xl">
-          <h2 className="mb-8 font-heading text-2xl font-bold">Related articles</h2>
+        <div className="container-px mx-auto max-w-[90rem]">
+          <h2 className="mb-8 font-heading text-2xl font-semibold">Related articles</h2>
           <div className="grid gap-6 md:grid-cols-3">
             {related.map((r) => (
               <Link
@@ -125,7 +111,7 @@ export default async function BlogDetailPage({
                   <Image src={r.image} alt={r.title} fill sizes="33vw" className="object-cover transition-transform duration-500 group-hover:scale-105" />
                 </div>
                 <div className="p-5">
-                  <h3 className="font-heading text-lg font-bold leading-snug group-hover:text-primary">
+                  <h3 className="font-heading text-lg font-semibold leading-snug group-hover:text-primary">
                     {r.title}
                   </h3>
                 </div>

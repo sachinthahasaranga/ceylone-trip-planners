@@ -13,12 +13,12 @@ export default function TermsPage() {
             This is placeholder legal content. By booking a tour with Ceylon Trip
             Planners you agree to the following terms and conditions.
           </p>
-          <h2 className="font-heading text-xl font-bold text-text">Bookings & payments</h2>
+          <h2 className="font-heading text-xl font-semibold text-text">Bookings & payments</h2>
           <p>
             A deposit is required to confirm your booking. Full payment terms
             will be provided at the time of confirmation.
           </p>
-          <h2 className="font-heading text-xl font-bold text-text">Cancellations</h2>
+          <h2 className="font-heading text-xl font-semibold text-text">Cancellations</h2>
           <p>
             Free cancellation is available up to 30 days before travel. Cancellation
             terms closer to departure will be outlined in your booking confirmation.

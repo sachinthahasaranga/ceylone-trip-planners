@@ -52,15 +52,18 @@ async function main() {
   ];
 
   for (const d of destinations) {
+    const html = `<p>${d.shortDesc}</p><p>A visit here is a highlight of any Sri Lanka itinerary — rich in history, scenery and photo opportunities. Our local guides know exactly when to arrive to beat the crowds and where to find the most memorable views.</p><h3>What to expect</h3><ul>${d.highlights
+      .map((h) => `<li>${h}</li>`)
+      .join("")}</ul>`;
     await prisma.destination.upsert({
       where: { slug: d.slug },
-      update: {},
+      update: { description: html },
       create: {
         slug: d.slug,
         name: d.name,
         region: d.region,
         shortDesc: d.shortDesc,
-        description: d.shortDesc,
+        description: html,
         coverImage: d.image,
         gallery: [d.image],
         highlights: d.highlights,
@@ -81,14 +84,15 @@ async function main() {
   ];
 
   for (const t of tours) {
+    const html = `<p>${t.summary}</p><p>This ${t.days}-day journey is designed to immerse you in the very best of Sri Lanka. Travel in comfort with a private guide, stay in characterful boutique properties and experience a seamless blend of iconic sights and authentic local moments — all at a relaxed, unhurried pace.</p><h3>Why you'll love it</h3><ul><li>Handpicked boutique accommodation</li><li>Private chauffeur guide throughout</li><li>A balance of must-see highlights and hidden gems</li></ul>`;
     await prisma.tourPackage.upsert({
       where: { slug: t.slug },
-      update: {},
+      update: { description: html },
       create: {
         slug: t.slug,
         title: t.title,
         summary: t.summary,
-        description: t.summary,
+        description: html,
         coverImage: t.image,
         gallery: [t.image],
         price: t.price,
@@ -113,14 +117,15 @@ async function main() {
   ];
 
   for (const p of posts) {
+    const html = `<p>Sri Lanka packs extraordinary variety into a compact island — ancient kingdoms, mist-wrapped tea country, wildlife-rich national parks and a coastline of golden beaches.</p><h2>Planning your journey</h2><p>The key to a great Sri Lankan holiday is pacing. Distances look small on a map, but winding mountain roads mean travel takes longer than expected. We recommend basing yourself in a region for two or three nights rather than moving every day.</p><blockquote>Travel slowly, eat everything, and always say yes to a cup of Ceylon tea.</blockquote><h3>Our top tips</h3><ul><li>Pack light, breathable clothing and a rain layer</li><li>Carry small cash for local markets and tuk-tuks</li><li>Book the scenic train seats well in advance</li></ul><p>Ready to experience it for yourself? Our team can craft a personalised itinerary around exactly the experiences you care about most.</p>`;
     await prisma.blogPost.upsert({
       where: { slug: p.slug },
-      update: {},
+      update: { content: html },
       create: {
         slug: p.slug,
         title: p.title,
         excerpt: p.excerpt,
-        content: p.excerpt,
+        content: html,
         coverImage: p.image,
         author: p.author,
         tags: [p.category],
@@ -138,10 +143,44 @@ async function main() {
     { q: "When is the best time to visit?", a: "Sri Lanka is a year-round destination thanks to two monsoon seasons." },
     { q: "Are your tours private or group?", a: "All tours are private by default with a dedicated guide and vehicle." },
   ];
-  for (let i = 0; i < faqs.length; i++) {
-    await prisma.faq.create({ data: { question: faqs[i].q, answer: faqs[i].a, order: i } }).catch(() => {});
+  if ((await prisma.faq.count()) === 0) {
+    for (let i = 0; i < faqs.length; i++) {
+      await prisma.faq.create({ data: { question: faqs[i].q, answer: faqs[i].a, order: i } });
+    }
   }
   console.log(`   ✔ FAQs`);
+
+  // ---- Reviews / testimonials ----
+  const reviews = [
+    { authorName: "Emma Thompson", location: "United Kingdom", rating: 5, content: "The most seamless trip we've ever taken. Every detail was handled and our guide felt like family by the end. Sri Lanka stole our hearts." },
+    { authorName: "David Müller", location: "Germany", rating: 5, content: "From leopards in Yala to the train through the hills — Ceylon Trip Planners crafted a perfect balance of adventure and relaxation." },
+    { authorName: "Aiko Tanaka", location: "Japan", rating: 5, content: "Beautifully organised and incredibly good value. The boutique hotels they chose were stunning. I recommend them to everyone." },
+    { authorName: "Sophie Laurent", location: "France", rating: 5, content: "An unforgettable honeymoon. The private beach dinner they arranged in Mirissa was pure magic. Thank you so much!" },
+  ];
+  if ((await prisma.review.count()) === 0) {
+    await prisma.review.createMany({
+      data: reviews.map((r) => ({ ...r, approved: true, featured: true })),
+    });
+  }
+  console.log(`   ✔ ${reviews.length} reviews`);
+
+  // ---- Gallery ----
+  const galleryImages = [
+    { url: img("photo-1588416936097-41850ab3d86d", 1000), caption: "Sigiriya Rock Fortress", category: "Culture" },
+    { url: img("photo-1566296314736-6eaac1ca0cb9", 1000), caption: "Hill country tea estates", category: "Nature" },
+    { url: img("photo-1507525428034-b723cf961d3e", 1000), caption: "Southern beaches", category: "Beaches" },
+    { url: img("photo-1549366021-9f761d450615", 1000), caption: "Yala safari", category: "Wildlife" },
+    { url: img("photo-1602216056096-3b40cc0c9944", 1000), caption: "Tea trails", category: "Nature" },
+    { url: img("photo-1546708973-b339540b5162", 1000), caption: "Coastal sunsets", category: "Beaches" },
+    { url: img("photo-1512100356356-de1b84283e18", 1000), caption: "Luxury escapes", category: "Luxury" },
+    { url: img("photo-1631292784640-2b24be784d5d", 1000), caption: "Sri Lankan cuisine", category: "Culture" },
+  ];
+  if ((await prisma.galleryImage.count()) === 0) {
+    await prisma.galleryImage.createMany({
+      data: galleryImages.map((g, i) => ({ ...g, order: i })),
+    });
+  }
+  console.log(`   ✔ ${galleryImages.length} gallery images`);
 
   console.log("✅ Seed complete.");
 }

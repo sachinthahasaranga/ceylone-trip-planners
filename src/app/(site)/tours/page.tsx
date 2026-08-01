@@ -23,7 +23,7 @@ export default async function ToursPage() {
       />
 
       <section className="py-16 lg:py-20">
-        <div className="container-px mx-auto max-w-7xl">
+        <div className="container-px mx-auto max-w-[90rem]">
           {/* Filter chips (visual; wiring comes with DB) */}
           <div className="no-scrollbar mb-10 flex gap-2 overflow-x-auto pb-2">
             {categories.map((c, i) => (

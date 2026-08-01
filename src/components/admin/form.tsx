@@ -23,7 +23,7 @@ export function AdminHeader({
             <ArrowLeft className="h-4 w-4" /> Back
           </Link>
         )}
-        <h1 className="font-heading text-2xl font-bold sm:text-3xl">{title}</h1>
+        <h1 className="font-heading text-2xl font-semibold sm:text-3xl">{title}</h1>
         {subtitle && <p className="text-muted">{subtitle}</p>}
       </div>
       {action}

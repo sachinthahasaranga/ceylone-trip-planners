@@ -6,7 +6,7 @@ export function GoogleButton({ label = "Continue with Google" }: { label?: strin
   return (
     <button
       type="button"
-      onClick={() => signIn("google", { callbackUrl: "/account" })}
+      onClick={() => signIn("google", { callbackUrl: "/post-login" })}
       className="flex h-12 w-full items-center justify-center gap-3 rounded-full border border-border bg-white text-sm font-semibold text-text transition hover:bg-surface"
     >
       <svg className="h-5 w-5" viewBox="0 0 24 24">

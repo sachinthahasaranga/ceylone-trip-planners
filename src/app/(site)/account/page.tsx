@@ -38,14 +38,14 @@ export default async function AccountPage() {
       />
 
       <section className="py-14 lg:py-20">
-        <div className="container-px mx-auto grid max-w-7xl gap-8 lg:grid-cols-[300px_1fr]">
+        <div className="container-px mx-auto grid max-w-[90rem] gap-8 lg:grid-cols-[300px_1fr]">
           {/* Profile card */}
           <aside className="lg:sticky lg:top-24 lg:self-start">
             <div className="rounded-2xl border border-border bg-white p-6 text-center shadow-[var(--shadow-card)]">
               <div className="mx-auto grid h-20 w-20 place-items-center rounded-full bg-primary/10 text-primary">
                 <User className="h-10 w-10" />
               </div>
-              <h2 className="mt-4 font-heading text-xl font-bold">
+              <h2 className="mt-4 font-heading text-xl font-semibold">
                 {session.user.name}
               </h2>
               <p className="flex items-center justify-center gap-1.5 text-sm text-muted">
@@ -64,7 +64,7 @@ export default async function AccountPage() {
 
           {/* Bookings */}
           <div>
-            <h2 className="font-heading text-2xl font-bold">My Bookings</h2>
+            <h2 className="font-heading text-2xl font-semibold">My Bookings</h2>
             {bookings.length === 0 ? (
               <div className="mt-6 rounded-2xl border border-dashed border-border bg-surface p-12 text-center">
                 <Package className="mx-auto h-12 w-12 text-muted/50" />
@@ -84,7 +84,7 @@ export default async function AccountPage() {
                   >
                     <div>
                       <div className="flex items-center gap-3">
-                        <h3 className="font-heading text-lg font-bold">
+                        <h3 className="font-heading text-lg font-semibold">
                           {b.tour?.title ?? "Custom enquiry"}
                         </h3>
                         <span
@@ -131,7 +131,7 @@ function StatCard({
       <span className="mx-auto grid h-10 w-10 place-items-center rounded-full bg-primary/10 text-primary">
         {icon}
       </span>
-      <p className="mt-2 font-heading text-xl font-bold">{value}</p>
+      <p className="mt-2 font-heading text-xl font-semibold">{value}</p>
       <p className="text-xs text-muted">{label}</p>
     </div>
   );

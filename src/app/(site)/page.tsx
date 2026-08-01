@@ -16,16 +16,26 @@ import { Testimonials } from "@/components/home/testimonials";
 import { TourCard } from "@/components/cards/tour-card";
 import { DestinationCard } from "@/components/cards/destination-card";
 import { SectionHeading } from "@/components/ui/section-heading";
+import { Reveal } from "@/components/ui/reveal";
 import { Button } from "@/components/ui/button";
-import { experiences, galleryImages, stats } from "@/lib/data";
-import { getDestinations, getTours, getPosts } from "@/lib/queries";
+import { experiences, stats } from "@/lib/data";
+import {
+  getDestinations,
+  getTours,
+  getPosts,
+  getTestimonials,
+  getGalleryImages,
+} from "@/lib/queries";
 
 export default async function HomePage() {
-  const [destinations, tours, posts] = await Promise.all([
-    getDestinations(),
-    getTours(),
-    getPosts(),
-  ]);
+  const [destinations, tours, posts, testimonials, galleryImages] =
+    await Promise.all([
+      getDestinations(),
+      getTours(),
+      getPosts(),
+      getTestimonials(),
+      getGalleryImages(),
+    ]);
   const featuredDestinations =
     destinations.filter((d) => d.featured).slice(0, 4).length > 0
       ? destinations.filter((d) => d.featured).slice(0, 4)
@@ -41,10 +51,10 @@ export default async function HomePage() {
 
       {/* Trust bar */}
       <section className="border-b border-border bg-white">
-        <div className="container-px mx-auto grid max-w-7xl grid-cols-2 gap-6 py-10 lg:grid-cols-4">
+        <div className="container-px mx-auto grid max-w-[90rem] grid-cols-2 gap-6 py-10 lg:grid-cols-4">
           {stats.map((s) => (
             <div key={s.label} className="text-center">
-              <p className="font-heading text-3xl font-bold text-primary sm:text-4xl">
+              <p className="font-heading text-3xl font-semibold text-primary sm:text-4xl">
                 {s.value}
               </p>
               <p className="mt-1 text-sm text-muted">{s.label}</p>
@@ -55,7 +65,7 @@ export default async function HomePage() {
 
       {/* Featured destinations */}
       <section className="py-20 lg:py-28">
-        <div className="container-px mx-auto max-w-7xl">
+        <div className="container-px mx-auto max-w-[90rem]">
           <div className="flex flex-col items-center justify-between gap-6 md:flex-row md:items-end">
             <SectionHeading
               align="left"
@@ -71,11 +81,16 @@ export default async function HomePage() {
 
           <div className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-4">
             {featuredDestinations.map((d, idx) => (
-              <DestinationCard
+              <Reveal
                 key={d.slug}
-                destination={d}
+                delay={idx}
                 className={idx === 0 ? "lg:col-span-2 lg:row-span-2" : ""}
-              />
+              >
+                <DestinationCard
+                  destination={d}
+                  className={idx === 0 ? "h-full min-h-[300px]" : "h-full"}
+                />
+              </Reveal>
             ))}
           </div>
         </div>
@@ -83,7 +98,7 @@ export default async function HomePage() {
 
       {/* Experiences */}
       <section className="bg-surface py-20 lg:py-28">
-        <div className="container-px mx-auto max-w-7xl">
+        <div className="container-px mx-auto max-w-[90rem]">
           <SectionHeading
             eyebrow="Curated by interest"
             title="Travel by Experience"
@@ -107,7 +122,7 @@ export default async function HomePage() {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/75 to-transparent" />
                 </div>
                 <div className="absolute inset-x-0 bottom-0 p-4 text-white">
-                  <p className="font-heading text-sm font-bold leading-tight">
+                  <p className="font-heading text-sm font-semibold leading-tight">
                     {e.name}
                   </p>
                   <p className="text-xs text-white/70">{e.count} tours</p>
@@ -120,7 +135,7 @@ export default async function HomePage() {
 
       {/* Popular tours */}
       <section className="py-20 lg:py-28">
-        <div className="container-px mx-auto max-w-7xl">
+        <div className="container-px mx-auto max-w-[90rem]">
           <div className="flex flex-col items-center justify-between gap-6 md:flex-row md:items-end">
             <SectionHeading
               align="left"
@@ -135,8 +150,10 @@ export default async function HomePage() {
           </div>
 
           <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {featuredTours.map((t) => (
-              <TourCard key={t.slug} tour={t} />
+            {featuredTours.map((t, i) => (
+              <Reveal key={t.slug} delay={i}>
+                <TourCard tour={t} />
+              </Reveal>
             ))}
           </div>
         </div>
@@ -144,7 +161,7 @@ export default async function HomePage() {
 
       {/* Why choose us */}
       <section className="relative overflow-hidden bg-[#0a1a17] py-20 text-white lg:py-28">
-        <div className="container-px mx-auto max-w-7xl">
+        <div className="container-px mx-auto max-w-[90rem]">
           <SectionHeading
             light
             eyebrow="Why Ceylon Trip Planners"
@@ -173,17 +190,18 @@ export default async function HomePage() {
                 title: "24/7 Support",
                 text: "A real person on call throughout your entire trip.",
               },
-            ].map((f) => (
-              <div
+            ].map((f, i) => (
+              <Reveal
                 key={f.title}
+                delay={i}
                 className="rounded-2xl bg-white/5 p-7 ring-1 ring-white/10 transition-colors hover:bg-white/10"
               >
                 <span className="grid h-14 w-14 place-items-center rounded-xl bg-secondary text-[#3a2a00]">
                   <f.icon className="h-7 w-7" />
                 </span>
-                <h3 className="mt-5 font-heading text-lg font-bold">{f.title}</h3>
+                <h3 className="mt-5 font-heading text-lg font-semibold">{f.title}</h3>
                 <p className="mt-2 text-sm text-white/70">{f.text}</p>
-              </div>
+              </Reveal>
             ))}
           </div>
         </div>
@@ -191,7 +209,7 @@ export default async function HomePage() {
 
       {/* How it works */}
       <section className="py-20 lg:py-28">
-        <div className="container-px mx-auto max-w-7xl">
+        <div className="container-px mx-auto max-w-[90rem]">
           <SectionHeading
             eyebrow="Simple & stress-free"
             title="How It Works"
@@ -217,29 +235,29 @@ export default async function HomePage() {
                 title: "Travel & Enjoy",
                 text: "Meet your guide and explore — we handle everything else.",
               },
-            ].map((s) => (
-              <div key={s.step} className="relative text-center">
+            ].map((s, i) => (
+              <Reveal key={s.step} delay={i} className="relative text-center">
                 <div className="mx-auto grid h-20 w-20 place-items-center rounded-full bg-primary/10 text-primary">
                   <s.icon className="h-9 w-9" />
                 </div>
-                <span className="mt-4 block font-heading text-sm font-bold tracking-widest text-secondary">
+                <span className="mt-4 block font-heading text-sm font-semibold tracking-widest text-secondary">
                   STEP {s.step}
                 </span>
-                <h3 className="mt-1 font-heading text-xl font-bold">{s.title}</h3>
+                <h3 className="mt-1 font-heading text-xl font-semibold">{s.title}</h3>
                 <p className="mx-auto mt-2 max-w-xs text-sm text-muted">
                   {s.text}
                 </p>
-              </div>
+              </Reveal>
             ))}
           </div>
         </div>
       </section>
 
-      <Testimonials />
+      <Testimonials testimonials={testimonials} />
 
       {/* Blog preview */}
       <section className="py-20 lg:py-28">
-        <div className="container-px mx-auto max-w-7xl">
+        <div className="container-px mx-auto max-w-[90rem]">
           <div className="flex flex-col items-center justify-between gap-6 md:flex-row md:items-end">
             <SectionHeading
               align="left"
@@ -281,7 +299,7 @@ export default async function HomePage() {
                     })}{" "}
                     · {p.readMinutes} min read
                   </p>
-                  <h3 className="mt-2 font-heading text-lg font-bold leading-snug transition-colors group-hover:text-primary">
+                  <h3 className="mt-2 font-heading text-lg font-semibold leading-snug transition-colors group-hover:text-primary">
                     {p.title}
                   </h3>
                   <p className="mt-2 line-clamp-2 text-sm text-muted">
@@ -296,14 +314,14 @@ export default async function HomePage() {
 
       {/* Gallery preview */}
       <section className="bg-surface py-20 lg:py-28">
-        <div className="container-px mx-auto max-w-7xl">
+        <div className="container-px mx-auto max-w-[90rem]">
           <SectionHeading
             eyebrow="Postcards"
             title="Moments from Sri Lanka"
             subtitle="A glimpse of the beauty that awaits."
           />
           <div className="mt-12 grid grid-cols-2 gap-3 sm:grid-cols-4">
-            {galleryImages.slice(0, 8).map((src, i) => (
+            {galleryImages.slice(0, 8).map((g, i) => (
               <div
                 key={i}
                 className={`relative overflow-hidden rounded-xl ${
@@ -311,8 +329,8 @@ export default async function HomePage() {
                 }`}
               >
                 <Image
-                  src={src}
-                  alt={`Sri Lanka gallery ${i + 1}`}
+                  src={g.url}
+                  alt={g.caption || `Sri Lanka gallery ${i + 1}`}
                   fill
                   sizes="(max-width:768px) 50vw, 25vw"
                   className="object-cover transition-transform duration-500 hover:scale-110"
@@ -340,7 +358,7 @@ export default async function HomePage() {
         <div className="absolute inset-0 bg-primary-dark/85" />
         <div className="container-px relative mx-auto max-w-3xl text-center text-white">
           <Star className="mx-auto h-8 w-8 fill-secondary text-secondary" />
-          <h2 className="mt-4 font-heading text-3xl font-bold sm:text-4xl lg:text-5xl">
+          <h2 className="mt-4 font-heading text-3xl font-semibold sm:text-4xl lg:text-5xl">
             Ready to plan your dream Sri Lanka trip?
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-white/85">

@@ -35,7 +35,7 @@ export function DestinationCard({
           <MapPin className="h-3.5 w-3.5" />
           {destination.region}
         </span>
-        <h3 className="font-heading text-2xl font-bold text-white">
+        <h3 className="font-heading text-2xl font-semibold text-white">
           {destination.name}
         </h3>
         <p className="mt-1 line-clamp-2 max-w-sm text-sm text-white/80">

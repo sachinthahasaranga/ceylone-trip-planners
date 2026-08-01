@@ -1,24 +1,24 @@
 import { prisma } from "@/lib/prisma";
-import * as dummy from "@/lib/data";
-import type { Tour, Destination, Post } from "@/lib/data";
+import type { Tour, Destination, Post, Testimonial } from "@/lib/data";
 
 /**
- * Data-access layer for public pages.
- * Reads from the database; falls back to bundled dummy data when the DB is
- * empty or unreachable, so the site always renders something sensible.
+ * Data-access layer for public pages — reads exclusively from the database.
+ * Run `npm run db:seed` to populate content.
  */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
+
+const FALLBACK_IMG =
+  "https://images.unsplash.com/photo-1588416936097-41850ab3d86d?auto=format&fit=crop&w=1200&q=80";
 
 function tourFromDb(t: any): Tour {
   return {
     slug: t.slug,
     title: t.title,
     summary: t.summary ?? "",
-    image:
-      t.coverImage ||
-      t.gallery?.[0] ||
-      "https://images.unsplash.com/photo-1588416936097-41850ab3d86d?auto=format&fit=crop&w=1200&q=80",
+    description: t.description ?? "",
+    image: t.coverImage || t.gallery?.[0] || FALLBACK_IMG,
+    gallery: t.gallery ?? [],
     price: t.price,
     durationDays: t.durationDays,
     durationNights: t.durationNights ?? Math.max(0, t.durationDays - 1),
@@ -26,8 +26,7 @@ function tourFromDb(t: any): Tour {
     difficulty: t.difficulty ?? "Easy",
     rating: t.rating ?? 5,
     featured: t.featured,
-    highlights:
-      t.highlights?.length ? t.highlights : (t.inclusions ?? []).slice(0, 3),
+    highlights: t.highlights?.length ? t.highlights : (t.inclusions ?? []).slice(0, 3),
   };
 }
 
@@ -37,11 +36,10 @@ function destinationFromDb(d: any): Destination {
     name: d.name,
     region: d.region ?? "Sri Lanka",
     shortDesc: d.shortDesc ?? "",
-    image:
-      d.coverImage ||
-      d.gallery?.[0] ||
-      "https://images.unsplash.com/photo-1588416936097-41850ab3d86d?auto=format&fit=crop&w=1200&q=80",
+    description: d.description ?? "",
+    image: d.coverImage || d.gallery?.[0] || FALLBACK_IMG,
     highlights: d.highlights ?? [],
+    bestTime: d.bestTime ?? "",
     featured: d.featured,
   };
 }
@@ -51,9 +49,8 @@ function postFromDb(p: any): Post {
     slug: p.slug,
     title: p.title,
     excerpt: p.excerpt ?? "",
-    image:
-      p.coverImage ||
-      "https://images.unsplash.com/photo-1546708973-b339540b5162?auto=format&fit=crop&w=1200&q=80",
+    content: p.content ?? "",
+    image: p.coverImage || FALLBACK_IMG,
     author: p.author ?? "Ceylon Trip Planners",
     date: (p.publishedAt ?? p.createdAt ?? new Date()).toISOString(),
     category: p.tags?.[0] ?? "Travel",
@@ -70,9 +67,10 @@ export async function getTours(): Promise<Tour[]> {
       orderBy: { createdAt: "desc" },
       include: { category: true },
     });
-    if (rows.length) return rows.map(tourFromDb);
-  } catch {}
-  return dummy.tours;
+    return rows.map(tourFromDb);
+  } catch {
+    return [];
+  }
 }
 
 export async function getTour(slug: string): Promise<Tour | null> {
@@ -81,9 +79,10 @@ export async function getTour(slug: string): Promise<Tour | null> {
       where: { slug },
       include: { category: true },
     });
-    if (t) return tourFromDb(t);
-  } catch {}
-  return dummy.tours.find((x) => x.slug === slug) ?? null;
+    return t ? tourFromDb(t) : null;
+  } catch {
+    return null;
+  }
 }
 
 /* ------------------------------ Destinations ----------------------------- */
@@ -94,17 +93,19 @@ export async function getDestinations(): Promise<Destination[]> {
       where: { published: true },
       orderBy: { createdAt: "desc" },
     });
-    if (rows.length) return rows.map(destinationFromDb);
-  } catch {}
-  return dummy.destinations;
+    return rows.map(destinationFromDb);
+  } catch {
+    return [];
+  }
 }
 
 export async function getDestination(slug: string): Promise<Destination | null> {
   try {
     const d = await prisma.destination.findUnique({ where: { slug } });
-    if (d) return destinationFromDb(d);
-  } catch {}
-  return dummy.destinations.find((x) => x.slug === slug) ?? null;
+    return d ? destinationFromDb(d) : null;
+  } catch {
+    return null;
+  }
 }
 
 /* ---------------------------------- Blog --------------------------------- */
@@ -115,15 +116,76 @@ export async function getPosts(): Promise<Post[]> {
       where: { published: true },
       orderBy: { publishedAt: "desc" },
     });
-    if (rows.length) return rows.map(postFromDb);
-  } catch {}
-  return dummy.posts;
+    return rows.map(postFromDb);
+  } catch {
+    return [];
+  }
 }
 
 export async function getPost(slug: string): Promise<Post | null> {
   try {
     const p = await prisma.blogPost.findUnique({ where: { slug } });
-    if (p) return postFromDb(p);
-  } catch {}
-  return dummy.posts.find((x) => x.slug === slug) ?? null;
+    return p ? postFromDb(p) : null;
+  } catch {
+    return null;
+  }
+}
+
+/* ------------------------------ Testimonials ----------------------------- */
+
+export async function getTestimonials(): Promise<Testimonial[]> {
+  try {
+    const rows = await prisma.review.findMany({
+      where: { approved: true },
+      orderBy: [{ featured: "desc" }, { createdAt: "desc" }],
+      take: 12,
+    });
+    return rows.map((r) => ({
+      name: r.authorName,
+      location: r.location ?? "",
+      avatar: `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(
+        r.authorName
+      )}&backgroundColor=0e7c66`,
+      rating: r.rating,
+      text: r.content,
+    }));
+  } catch {
+    return [];
+  }
+}
+
+/* ---------------------------------- FAQ ---------------------------------- */
+
+export type FaqItem = { question: string; answer: string };
+
+export async function getFaqs(): Promise<FaqItem[]> {
+  try {
+    const rows = await prisma.faq.findMany({
+      where: { published: true },
+      orderBy: { order: "asc" },
+    });
+    return rows.map((f) => ({ question: f.question, answer: f.answer }));
+  } catch {
+    return [];
+  }
+}
+
+/* -------------------------------- Gallery -------------------------------- */
+
+export type GalleryItem = { url: string; caption: string; category: string };
+
+export async function getGalleryImages(): Promise<GalleryItem[]> {
+  try {
+    const rows = await prisma.galleryImage.findMany({
+      where: { published: true },
+      orderBy: { order: "asc" },
+    });
+    return rows.map((g) => ({
+      url: g.url,
+      caption: g.caption ?? "",
+      category: g.category ?? "Sri Lanka",
+    }));
+  } catch {
+    return [];
+  }
 }

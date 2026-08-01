@@ -40,7 +40,7 @@ export function ContactForm() {
     return (
       <div className="rounded-2xl bg-primary/10 p-8 text-center">
         <CheckCircle2 className="mx-auto h-12 w-12 text-primary" />
-        <h3 className="mt-4 font-heading text-xl font-bold text-primary">
+        <h3 className="mt-4 font-heading text-xl font-semibold text-primary">
           Message sent!
         </h3>
         <p className="mt-2 text-muted">

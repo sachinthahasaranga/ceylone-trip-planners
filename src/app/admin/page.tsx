@@ -56,7 +56,7 @@ export default async function AdminDashboard() {
   return (
     <div>
       <div className="mb-8">
-        <h1 className="font-heading text-3xl font-bold">Dashboard</h1>
+        <h1 className="font-heading text-3xl font-semibold">Dashboard</h1>
         <p className="text-muted">Overview of your travel business.</p>
       </div>
 
@@ -79,7 +79,7 @@ export default async function AdminDashboard() {
               <c.icon className="h-7 w-7" />
             </span>
             <div className="flex-1">
-              <p className="font-heading text-2xl font-bold">{c.value}</p>
+              <p className="font-heading text-2xl font-semibold">{c.value}</p>
               <p className="text-sm text-muted">{c.label}</p>
             </div>
             <ArrowRight className="h-4 w-4 text-muted transition group-hover:translate-x-1 group-hover:text-primary" />
@@ -90,7 +90,7 @@ export default async function AdminDashboard() {
       {/* Recent bookings */}
       <div className="mt-8 rounded-2xl border border-border bg-white">
         <div className="flex items-center justify-between border-b border-border px-6 py-4">
-          <h2 className="font-heading text-lg font-bold">Recent Bookings</h2>
+          <h2 className="font-heading text-lg font-semibold">Recent Bookings</h2>
           <Link href="/admin/bookings" className="text-sm font-medium text-primary hover:underline">
             View all
           </Link>

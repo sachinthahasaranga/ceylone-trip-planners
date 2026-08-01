@@ -8,7 +8,7 @@ export const metadata: Metadata = { title: "Sign In" };
 export default function LoginPage() {
   return (
     <div>
-      <h1 className="font-heading text-3xl font-bold">Welcome back</h1>
+      <h1 className="font-heading text-3xl font-semibold">Welcome back</h1>
       <p className="mt-2 text-muted">Sign in to continue your journey.</p>
 
       <div className="mt-8">

@@ -10,6 +10,7 @@ import {
   SubmitButton,
 } from "@/components/admin/form";
 import { ImageUploader } from "@/components/admin/image-uploader";
+import { RichTextEditor } from "@/components/admin/rich-text-editor";
 
 export function TourForm({ tour }: { tour?: TourPackage }) {
   const action = saveTour.bind(null, tour?.id ?? null);
@@ -33,7 +34,7 @@ export function TourForm({ tour }: { tour?: TourPackage }) {
           </div>
           <div className="mt-4">
             <Field label="Description">
-              <Textarea name="description" rows={6} defaultValue={tour?.description ?? ""} />
+              <RichTextEditor name="description" defaultValue={tour?.description ?? ""} />
             </Field>
           </div>
 
@@ -48,7 +49,7 @@ export function TourForm({ tour }: { tour?: TourPackage }) {
         </Card>
 
         <Card>
-          <h3 className="mb-4 font-heading text-lg font-bold">SEO</h3>
+          <h3 className="mb-4 font-heading text-lg font-semibold">SEO</h3>
           <div className="space-y-4">
             <Field label="Meta title">
               <Input name="metaTitle" defaultValue={tour?.metaTitle ?? ""} />

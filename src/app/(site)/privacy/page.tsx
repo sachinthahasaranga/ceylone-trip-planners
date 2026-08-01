@@ -14,12 +14,12 @@ export default function PrivacyPage() {
             privacy and is committed to protecting your personal data. This
             policy explains how we collect, use and safeguard your information.
           </p>
-          <h2 className="font-heading text-xl font-bold text-text">Information we collect</h2>
+          <h2 className="font-heading text-xl font-semibold text-text">Information we collect</h2>
           <p>
             We collect information you provide when making an enquiry or booking,
             including your name, email, phone number and travel preferences.
           </p>
-          <h2 className="font-heading text-xl font-bold text-text">How we use it</h2>
+          <h2 className="font-heading text-xl font-semibold text-text">How we use it</h2>
           <p>
             Your information is used solely to respond to enquiries, arrange your
             travel and, with your consent, send you relevant offers. We never

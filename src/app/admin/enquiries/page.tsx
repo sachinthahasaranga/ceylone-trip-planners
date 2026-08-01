@@ -34,9 +34,9 @@ export default async function AdminEnquiriesPage() {
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div>
                   <div className="flex items-center gap-2">
-                    <h3 className="font-heading text-lg font-bold">{e.name}</h3>
+                    <h3 className="font-heading text-lg font-semibold">{e.name}</h3>
                     {!e.read && (
-                      <span className="rounded-full bg-primary px-2 py-0.5 text-[0.6rem] font-bold uppercase text-white">
+                      <span className="rounded-full bg-primary px-2 py-0.5 text-[0.6rem] font-semibold uppercase text-white">
                         New
                       </span>
                     )}
