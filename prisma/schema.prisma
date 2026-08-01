@@ -1,0 +1,315 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// ---------------------------------------------------------------------------
+// Auth (NextAuth v5 + credentials)
+// ---------------------------------------------------------------------------
+
+enum Role {
+  USER
+  ADMIN
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?
+  image         String?
+  password      String? // hashed; null for OAuth-only users
+  role          Role      @default(USER)
+  phone         String?
+  blocked       Boolean   @default(false)
+
+  accounts  Account[]
+  sessions  Session[]
+  bookings  Booking[]
+  enquiries Enquiry[]
+  reviews   Review[]
+  wishlist  Wishlist[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// ---------------------------------------------------------------------------
+// Content
+// ---------------------------------------------------------------------------
+
+model Destination {
+  id          String  @id @default(cuid())
+  slug        String  @unique
+  name        String
+  region      String? // e.g. Hill Country, Southern Coast
+  shortDesc   String?
+  description String? @db.Text
+  coverImage  String?
+  gallery     String[] @default([])
+  highlights  String[] @default([])
+  bestTime    String?
+  latitude    Float?
+  longitude   Float?
+  featured    Boolean @default(false)
+  published   Boolean @default(true)
+
+  // SEO
+  metaTitle       String?
+  metaDescription String?
+  ogImage         String?
+  keywords        String?
+
+  tours TourPackage[] @relation("DestinationTours")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Category {
+  id    String @id @default(cuid())
+  slug  String @unique
+  name  String
+  type  CategoryType @default(TOUR)
+
+  tours TourPackage[]
+  posts BlogPost[]
+}
+
+enum CategoryType {
+  TOUR
+  BLOG
+}
+
+model TourPackage {
+  id          String  @id @default(cuid())
+  slug        String  @unique
+  title       String
+  summary     String?
+  description String? @db.Text
+  coverImage  String?
+  gallery     String[] @default([])
+  price       Float
+  discount    Float?  // percentage
+  durationDays Int
+  durationNights Int?
+  groupSize   String?
+  difficulty  String? // Easy / Moderate / Challenging
+  inclusions  String[] @default([])
+  exclusions  String[] @default([])
+  rating      Float   @default(5)
+  featured    Boolean @default(false)
+  published   Boolean @default(true)
+
+  categoryId   String?
+  category     Category?     @relation(fields: [categoryId], references: [id])
+  destinations Destination[] @relation("DestinationTours")
+  itinerary    ItineraryDay[]
+  bookings     Booking[]
+  reviews      Review[]
+  wishlist     Wishlist[]
+
+  // SEO
+  metaTitle       String?
+  metaDescription String?
+  ogImage         String?
+  keywords        String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ItineraryDay {
+  id          String @id @default(cuid())
+  tourId      String
+  dayNumber   Int
+  title       String
+  description String? @db.Text
+  meals       String?
+  accommodation String?
+
+  tour TourPackage @relation(fields: [tourId], references: [id], onDelete: Cascade)
+
+  @@unique([tourId, dayNumber])
+}
+
+model BlogPost {
+  id          String  @id @default(cuid())
+  slug        String  @unique
+  title       String
+  excerpt     String?
+  content     String? @db.Text
+  coverImage  String?
+  author      String?
+  readMinutes Int?    @default(5)
+  tags        String[] @default([])
+  featured    Boolean @default(false)
+  published   Boolean @default(true)
+  publishedAt DateTime @default(now())
+
+  categoryId String?
+  category   Category? @relation(fields: [categoryId], references: [id])
+
+  // SEO
+  metaTitle       String?
+  metaDescription String?
+  ogImage         String?
+  keywords        String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ---------------------------------------------------------------------------
+// Interactions
+// ---------------------------------------------------------------------------
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  COMPLETED
+}
+
+model Booking {
+  id          String        @id @default(cuid())
+  reference   String        @unique @default(cuid())
+  tourId      String?
+  userId      String?
+  fullName    String
+  email       String
+  phone       String?
+  travelDate  DateTime?
+  adults      Int           @default(1)
+  children    Int           @default(0)
+  message     String?       @db.Text
+  status      BookingStatus @default(PENDING)
+  totalPrice  Float?
+
+  tour TourPackage? @relation(fields: [tourId], references: [id], onDelete: SetNull)
+  user User?        @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Enquiry {
+  id      String  @id @default(cuid())
+  name    String
+  email   String
+  phone   String?
+  subject String?
+  message String  @db.Text
+  read    Boolean @default(false)
+  userId  String?
+
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  createdAt DateTime @default(now())
+}
+
+model Review {
+  id       String  @id @default(cuid())
+  tourId   String?
+  userId   String?
+  authorName String
+  location String?
+  rating   Int     @default(5)
+  content  String  @db.Text
+  approved Boolean @default(false)
+  featured Boolean @default(false)
+
+  tour TourPackage? @relation(fields: [tourId], references: [id], onDelete: SetNull)
+  user User?        @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  createdAt DateTime @default(now())
+}
+
+model Wishlist {
+  id     String @id @default(cuid())
+  userId String
+  tourId String
+
+  user User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tour TourPackage @relation(fields: [tourId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@unique([userId, tourId])
+}
+
+model Faq {
+  id       String @id @default(cuid())
+  question String
+  answer   String @db.Text
+  category String?
+  order    Int    @default(0)
+  published Boolean @default(true)
+}
+
+model NewsletterSubscriber {
+  id    String @id @default(cuid())
+  email String @unique
+  createdAt DateTime @default(now())
+}
+
+model SiteSetting {
+  id          String @id @default("default")
+  siteName    String @default("Ceylon Trip Planners")
+  tagline     String?
+  logoUrl     String?
+  phone       String?
+  whatsapp    String?
+  email       String?
+  address     String?
+  facebook    String?
+  instagram   String?
+  twitter     String?
+  youtube     String?
+  heroTitle   String?
+  heroSubtitle String?
+  metaTitle       String?
+  metaDescription String?
+  ogImage         String?
+  updatedAt DateTime @updatedAt
+}
